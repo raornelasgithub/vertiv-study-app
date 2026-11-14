@@ -1,0 +1,669 @@
+{
+  "_help": "Study topics. Each topic has an id (used by questions), title, summary, examWeight (how many exam questions it gets relative to others) and sections. A section has a heading, a body (list of paragraphs; or {\"list\": [...]}, {\"note\": \"...\", \"kind\": \"safety|info\"}, {\"table\": [[header...],[row...]]}) and optional refs (ids from references.json). Use **double asterisks** for bold.",
+  "topics": [
+    {
+      "id": "refrigeration",
+      "title": "Refrigeration Fundamentals",
+      "summary": "The vapor-compression cycle, pressures, superheat and subcooling",
+      "examWeight": 4,
+      "intro": "Every DX (direct expansion) Liebert unit - DS, PDX, DSE, CRV DX, Mini-Mate, DataMate - uses the same basic vapor-compression cycle. If you understand the four main components and what the refrigerant is doing in each one, you can reason through most refrigeration questions.",
+      "sections": [
+        {
+          "heading": "The four main components",
+          "body": [
+            "Refrigeration does not 'make cold'. It **moves heat** from where it is not wanted (the room air) to where it can be rejected (outdoor air, water or glycol).",
+            {"table": [
+              ["Component", "What goes in", "What happens", "What comes out"],
+              ["**Compressor**", "Low-pressure, low-temperature vapor", "Vapor is compressed; pressure and temperature rise", "High-pressure, high-temperature vapor (hot gas)"],
+              ["**Condenser**", "Hot high-pressure vapor", "Heat is rejected to air/water/glycol; vapor condenses", "High-pressure liquid (usually subcooled)"],
+              ["**Metering device** (TXV/EEV)", "High-pressure liquid", "Pressure drop; some liquid flashes to vapor", "Low-pressure, cold liquid/vapor mix"],
+              ["**Evaporator**", "Cold low-pressure mix", "Refrigerant boils, absorbing heat from room air", "Low-pressure vapor (superheated)"]
+            ]},
+            "The **high side** runs from the compressor discharge through the condenser to the metering device. The **low side** runs from the metering device through the evaporator back to the compressor suction.",
+            {"note": "Memory tip: the evaporator **absorbs** heat (room side). The condenser **rejects** heat (outdoor/water side). The compressor is the pump. The metering device is the pressure drop.", "kind": "info"}
+          ],
+          "refs": ["hvacr-superheat-basics"]
+        },
+        {
+          "heading": "Pressure and temperature (saturation)",
+          "body": [
+            "When refrigerant is a liquid and vapor mixture (boiling or condensing), its temperature is fixed by its pressure. This is the **saturation temperature**. A pressure-temperature (P/T) chart or gauge manifold converts one to the other for a specific refrigerant.",
+            {"list": [
+              "**Suction pressure** tells you the evaporator saturation (boiling) temperature.",
+              "**Discharge / head pressure** tells you the condenser saturation (condensing) temperature.",
+              "Higher heat load on the evaporator generally raises suction pressure; less airflow or less refrigerant generally lowers it.",
+              "Poor heat rejection at the condenser (dirty coil, failed fan, hot ambient, low water flow) raises head pressure."
+            ]},
+            "Refrigerants used in Liebert equipment have changed over time: older units used R-22 or R-407C; many current units use R-410A; newer Vertiv products are moving to low-GWP refrigerants such as R-454B. **Always use the refrigerant and oil on the unit nameplate.**",
+            {"note": "R-407C (and other zeotropic blends) have temperature glide. For blends, superheat is calculated from the **dew point** and subcooling from the **bubble point**. Blends are charged as liquid.", "kind": "info"}
+          ],
+          "refs": ["hvacr-superheat-basics", "hvacr-pressures", "econophase"]
+        },
+        {
+          "heading": "Superheat and subcooling",
+          "body": [
+            "**Superheat** = actual suction line temperature minus evaporator saturation temperature. It shows how much the vapor has been heated after all liquid boiled off. It confirms that liquid is not returning to the compressor and indicates how well the evaporator is fed.",
+            "**Subcooling** = condenser saturation temperature minus actual liquid line temperature. It shows how far the liquid has been cooled below its condensing temperature, and indicates how much liquid is stacked in the condenser.",
+            {"table": [
+              ["Reading", "Usually suggests (check other readings too)"],
+              ["High superheat", "Evaporator is starved: low charge, restriction, underfeeding valve"],
+              ["Low / zero superheat", "Evaporator is flooded: overfeeding valve, very low airflow, risk of liquid floodback"],
+              ["High subcooling", "Liquid backing up in condenser: overcharge or a restriction after the condenser"],
+              ["Low subcooling", "Little liquid in condenser: low charge (or flooded-condenser head pressure control in mild weather - model specific)"]
+            ]},
+            {"note": "Target superheat and subcooling values depend on the equipment and metering device. Use the manufacturer's data, not a generic number. Never adjust charge without proper certification (EPA 608) and authorization.", "kind": "safety"}
+          ],
+          "refs": ["hvacr-superheat-basics", "hvacr-solving-superheat", "hvacr-pressures"]
+        },
+        {
+          "heading": "Metering devices",
+          "body": [
+            {"list": [
+              "**TXV (thermostatic expansion valve)** - a sensing bulb on the suction line adjusts the valve to hold roughly constant superheat as load changes. The bulb must be well clamped and insulated.",
+              "**EEV (electronic expansion valve)** - a controller drives a stepper motor using pressure and temperature sensors. Common on newer Liebert units; controlled by the unit's controls (iCOM).",
+              "**Fixed orifice / capillary tube** - cannot adjust to load; used on small simple equipment."
+            ]},
+            "A metering device creates the pressure drop between the high and low side. A restricted metering device or clogged filter drier causes low suction pressure, high superheat and a starved evaporator."
+          ]
+        },
+        {
+          "heading": "Refrigerant leaks and handling",
+          "body": [
+            "Signs of a leak or undercharge: low suction pressure, high superheat, low subcooling, bubbles in a sight glass (on units that have one, under stable conditions), oily residue at joints, reduced capacity, low-pressure alarms.",
+            {"list": [
+              "Oil stains at fittings, brazed joints, Schrader cores and service valves are classic leak clues - refrigerant carries oil with it.",
+              "Leak checking methods: electronic detector, bubble solution, nitrogen pressure test (after recovery, per procedure).",
+              "Fix the leak - don't just 'top off'. EPA rules require leak repair for certain appliances and prohibit knowingly venting refrigerant.",
+              "Opening a refrigerant circuit, recovering or charging refrigerant requires **EPA Section 608 certification** in the U.S."
+            ]},
+            "Many Liebert units use **POE (polyolester) oil**, which absorbs moisture readily. Keep systems sealed, replace filter driers when the system is opened, and evacuate properly."
+          ],
+          "refs": ["epa-608", "epa-608-overview", "minimate-vc"]
+        },
+        {
+          "heading": "Air-, water- and glycol-cooled heat rejection",
+          "body": [
+            {"list": [
+              "**Air-cooled**: indoor unit piped to an outdoor condenser (e.g. Liebert MC microchannel condenser or prop-fan condenser). Head pressure is controlled by condenser fan speed/cycling or, on some systems, a flooded-condenser (Lee-Temp) method with a receiver.",
+              "**Water-cooled**: a condenser inside the unit uses building/tower water. A water regulating valve (pressure or motorized) controls head pressure.",
+              "**Glycol-cooled**: same idea as water-cooled, but a glycol loop is cooled by an outdoor drycooler. Some units add a second coil for free cooling when glycol is cold enough (model specific).",
+              "**Chilled water (CW)** units such as Liebert PCW have no compressor at all - a valve modulates chilled water through the coil."
+            ]}
+          ],
+          "refs": ["ds-manual", "pdx-pcw-manual"]
+        }
+      ]
+    },
+    {
+      "id": "compressors",
+      "title": "Compressors & Capacity Control",
+      "summary": "Scroll, digital scroll, staging, unloading, protection",
+      "examWeight": 4.5,
+      "intro": "Compressor loading and unloading came up in training, so study this topic carefully. The key idea: different compressor designs reduce capacity in **different** ways. Never assume one compressor's unloader logic applies to another - check the unit's manual and wiring diagram.",
+      "sections": [
+        {
+          "heading": "Why capacity control matters",
+          "body": [
+            "A precision cooling unit is sized for the design load, but the room load is often lower. Running full capacity at low load causes short cycling, wide temperature swings, poor humidity control and extra wear. **Capacity control** lets the unit deliver only the cooling that is needed.",
+            "Common methods in Liebert/Vertiv equipment and the wider industry:",
+            {"table": [
+              ["Method", "How capacity is reduced", "Typical examples"],
+              ["**Staging (on/off)**", "Turn whole compressors on or off (lead/lag, tandem pairs)", "Dual-compressor units, tandem scrolls"],
+              ["**Cylinder unloading**", "Solenoid valve disables cylinders on one head of a semi-hermetic reciprocating compressor", "Legacy 4-step Liebert units (Deluxe System/3, older DS/iCOM)"],
+              ["**Digital scroll**", "Solenoid separates the scrolls for part of a time cycle; capacity = loaded time / cycle time", "Liebert DS, DSE, PFD condensing units, others"],
+              ["**Variable speed (inverter)**", "Drive changes compressor motor speed", "Some newer Vertiv units (model specific)"],
+              ["**Hot gas bypass**", "Discharge gas is bypassed to the low side to false-load the evaporator", "Some older units; noted as not available with 4-step systems in iCOM manual"]
+            ]}
+          ],
+          "refs": ["icom-legacy-manual", "deluxe-sys3", "copeland-digital"]
+        },
+        {
+          "heading": "Standard scroll compressors",
+          "body": [
+            "A scroll compressor has one fixed scroll and one orbiting scroll. Gas trapped between them is squeezed into smaller pockets toward the center and discharged. Scrolls have few moving parts, handle small amounts of liquid better than reciprocating compressors, and run smoothly.",
+            {"list": [
+              "A standard fixed-speed scroll is either **on** (100%) or **off** - it has no unloader. Capacity is controlled by cycling or staging it with other compressors.",
+              "**Three-phase scrolls are rotation sensitive.** Running backward: loud, little or no pressure difference, low amp draw, and the internal protector may trip. Correct by swapping two supply legs (with power off and locked out) - many units include a phase monitor.",
+              "Scroll compressors normally use an internal motor protector (inherent overload); a hot compressor may need time to cool and reset."
+            ]}
+          ],
+          "refs": ["hvacr-digital-scroll", "hvacr-compressor-diag"]
+        },
+        {
+          "heading": "Digital scroll compressors (loading / unloading)",
+          "body": [
+            "A Copeland Digital Scroll can separate its scroll set axially by a small distance. When the scrolls are separated, **no gas is pumped** even though the motor keeps turning.",
+            {"list": [
+              "**Loaded state:** unloading solenoid **de-energized** - full (100%) capacity.",
+              "**Unloaded state:** unloading solenoid **energized** - scrolls separate, about 0% capacity, little or no mass flow.",
+              "The controller repeats a fixed time cycle (for example about 15 seconds). Capacity is the fraction of the cycle spent loaded. Example: 7.5 s loaded + 7.5 s unloaded = about 50%.",
+              "Normal signs: a repeating change in sound and a cycling amp draw (amps drop when unloaded). These are normal for a digital scroll and are not by themselves a fault.",
+              "Liebert manuals (DS, DSE, PFD, CoolPhase) include a section on the **unloading solenoid(s) on a digital scroll compressor**. When a digital scroll is replaced, the digital solenoid valve and coil are typically replaced too - follow the unit manual."
+            ]},
+            {"note": "The energized = unloaded logic above is from Copeland's Digital Scroll documentation. Confirm the logic, cycle time and minimum capacity for the specific compressor and control in the unit's manual.", "kind": "info"}
+          ],
+          "refs": ["copeland-digital", "copeland-dcc", "hvacr-digital-scroll", "ds-manual", "pfd-condensing", "achr-digital-capacity"]
+        },
+        {
+          "heading": "Cylinder unloaders and 4-step systems (legacy)",
+          "body": [
+            "Older Liebert units with semi-hermetic reciprocating compressors used **cylinder unloaders**: a solenoid valve on one cylinder head prevents those cylinders from pumping, reducing that compressor's capacity.",
+            "The Liebert Deluxe manual describes a **four-step** system: two compressors, each with an unloader on one head, giving four capacity steps (one compressor unloaded, both unloaded, one loaded + one unloaded, both loaded). The legacy iCOM manual shows a staging table in which an **energized** unloader corresponds to reduced capacity.",
+            {"note": "Unloader logic (energized vs de-energized) differs between compressor makes and designs. Use the wiring diagram and manual for the actual unit. This is a model-specific topic.", "kind": "info"}
+          ],
+          "refs": ["deluxe-sys3", "icom-legacy-manual"]
+        },
+        {
+          "heading": "Compressor staging and lead/lag",
+          "body": [
+            "Units with two compressors (or two circuits) stage them as demand increases. Controls typically rotate the lead compressor to equalize run hours, enforce **minimum on/off times** (anti-short-cycle) and add time delays between starts to limit inrush current.",
+            "On iCOM units, the compressor responds to the cooling demand calculated from the proportional band; staging details and minimum run times are set in service menus and vary by model and firmware."
+          ],
+          "refs": ["icom-legacy-manual", "icom-getting-started"]
+        },
+        {
+          "heading": "Compressor protection",
+          "body": [
+            {"list": [
+              "**High-pressure switch (HP)** - opens on excessive discharge pressure and stops the compressor. On many Liebert units it is a manual-reset device; the cause (dirty condenser, failed fan, no water flow, overcharge, non-condensables) must be found before resetting.",
+              "**Low-pressure switch (LP)** - stops the compressor on low suction pressure (loss of charge, restriction, very low airflow). Cold-weather air-cooled systems often include a start-up time delay so suction pressure can build.",
+              "**Internal / external overload** - protects the motor from overcurrent and overheating.",
+              "**Crankcase heater** (where fitted) - keeps refrigerant from migrating into the oil during off cycles.",
+              "**Anti-short-cycle timer** - enforces minimum off time between starts.",
+              "**Phase monitor / rotation protection** - protects against wrong rotation, phase loss and imbalance on three-phase units.",
+              "**High discharge temperature sensor** (some compressors, including digital scrolls) - protects against overheating."
+            ]},
+            {"note": "Never jumper or bypass a pressure switch or other safety device to 'get the unit running'. A safety trip is a symptom; find the cause.", "kind": "safety"}
+          ],
+          "refs": ["ds-manual", "hvacr-compressor-diag"]
+        },
+        {
+          "heading": "Compressor electrical checks",
+          "body": [
+            {"list": [
+              "Verify supply voltage at the compressor contactor (line and load side), with correct PPE and procedures.",
+              "Single-phase compressors use start/run windings and a **run capacitor**; test the capacitor (discharged first) against its rated microfarads.",
+              "Winding resistance: on a single-phase compressor, C-S + C-R should equal S-R. Compare readings to manufacturer data.",
+              "Check for shorts to ground. Be careful condemning a scroll compressor on a megohm reading alone - refrigerant in the oil and temperature affect results; follow manufacturer guidance.",
+              "A compressor that will not start may be: no control signal, open safety, failed contactor, tripped overload, bad capacitor, or a failed compressor. **Verify each before condemning the compressor.**"
+            ]}
+          ],
+          "refs": ["hvacr-compressor-diag"]
+        }
+      ]
+    },
+    {
+      "id": "airflow",
+      "title": "Airflow & Heat Transfer",
+      "summary": "Filters, coils, fans, delta-T, supply and return",
+      "examWeight": 3,
+      "intro": "Precision cooling depends on moving a large volume of air across the coil. Many 'refrigeration problems' start as airflow problems, so airflow is one of the first things to check.",
+      "sections": [
+        {
+          "heading": "Supply and return air",
+          "body": [
+            "**Return air** is the warm air coming back to the unit from the room or hot aisle. **Supply air** is the cooled air leaving the unit. Perimeter units may be **downflow** (supply into a raised floor) or **upflow** (supply into the room or ducts).",
+            {"list": [
+              "Air passes through the **filters**, across the **evaporator coil** (or chilled-water coil), and is moved by the **fans/blowers**.",
+              "In data centers, cold air should reach server **inlets**; hot exhaust should return to the cooling unit without mixing (hot aisle / cold aisle).",
+              "Blocked floor tiles, missing blanking panels and cable cutouts cause bypass and recirculation, which create hot spots even when the unit is working."
+            ]}
+          ],
+          "refs": ["precision-ac-article", "hvacr-server-room"]
+        },
+        {
+          "heading": "Temperature difference (delta-T)",
+          "body": [
+            "**Delta-T across the coil** = return air temperature minus supply air temperature. It is a quick health check: compare it to what is normal for that unit at that load.",
+            {"list": [
+              "Low airflow usually makes delta-T **larger** (air spends more time on the coil) while total capacity drops and the coil may get too cold or even ice.",
+              "Very small delta-T with full demand can mean the coil is not getting enough refrigerant or chilled water, or the compressor is not pumping.",
+              "Sensible heat changes temperature; latent heat removes moisture. IT rooms are mostly sensible load."
+            ]}
+          ]
+        },
+        {
+          "heading": "Filters",
+          "body": [
+            "Dirty or restricted filters reduce airflow, which lowers capacity, can lower suction pressure and coil temperature, and can trigger loss-of-airflow or clogged-filter alarms. Filter replacement is often called the most important routine maintenance task.",
+            {"list": [
+              "Many Liebert units have a **filter clog switch** (differential pressure switch) that raises an alarm when pressure drop across the filters is high.",
+              "Replace filters with the correct size and rating, observe airflow direction arrows, and leave no gaps that let air bypass.",
+              "Record the date of filter changes; dirty environments need shorter intervals."
+            ]}
+          ],
+          "refs": ["techtarget-crac-pm", "ds-manual"]
+        },
+        {
+          "heading": "Coils",
+          "body": [
+            {"list": [
+              "**Evaporator coil**: dirt on the fins reduces airflow and heat transfer. Check for bent fins, dirt, ice, and water carryover.",
+              "**Condenser coil** (outdoor): dirt, cottonwood, leaves and debris reduce heat rejection and raise head pressure. Clean according to the manual (often from the inside out, with low pressure water/approved cleaner, power locked out).",
+              "**Microchannel condensers** (e.g. Liebert MC) use thin aluminum tubes; follow the manufacturer's cleaning method and avoid high-pressure washing."
+            ]}
+          ],
+          "refs": ["ds-manual"]
+        },
+        {
+          "heading": "Fans and blowers",
+          "body": [
+            {"list": [
+              "Current Liebert perimeter units commonly use **EC (electronically commutated) plug fans** with variable speed controlled by iCOM. Older units used belt-driven centrifugal blowers.",
+              "Belt-driven blowers: check belt tension, wear and alignment; a slipping belt reduces airflow.",
+              "Check motor amps, bearings (noise, play), and that fan speed matches the controller command.",
+              "**Airflow loss** alarms may come from an air-proving (differential pressure) switch or fan feedback."
+            ]},
+            {"note": "Fans can start automatically. Lock out power and wait for fans to stop completely before reaching in. EC fan drives may hold a charge after power is removed - follow the manual's waiting time.", "kind": "safety"}
+          ],
+          "refs": ["pdx-pcw-manual", "ds-manual", "techtarget-crac-pm"]
+        },
+        {
+          "heading": "Room conditions",
+          "body": [
+            "ASHRAE TC 9.9 publishes thermal guidelines with recommended and allowable server inlet temperature and humidity ranges. Many data centers now control to server inlet (supply or rack) temperature rather than return air. Setpoints are site-specific - follow the site's requirements."
+          ],
+          "refs": ["ashrae-tc99"]
+        }
+      ]
+    },
+    {
+      "id": "electrical",
+      "title": "Electrical Systems & Safety",
+      "summary": "LOTO, meters, contactors, transformers, capacitors, motors",
+      "examWeight": 3,
+      "intro": "Precision cooling units contain line voltage (often 208-480 V three-phase), control voltage, stored energy in capacitors and drives, and rotating fans. Safety comes first in every electrical task.",
+      "sections": [
+        {
+          "heading": "Electrical safety basics",
+          "body": [
+            {"list": [
+              "Never assume equipment is de-energized because the display is dark or the unit is off. **Test before you touch.**",
+              "Use a properly rated meter (CAT rating for the location) and do a **live-dead-live** check: test the meter on a known live source, test the circuit, test the known source again.",
+              "Wear PPE appropriate for the task and follow your employer's electrical safety program (NFPA 70E-based).",
+              "Some units have **more than one power source** (dual feeds, separate humidifier/reheat circuits, remote condenser power, UPS-fed controls). Check the wiring diagram.",
+              "Only qualified persons work on or near exposed energized parts."
+            ]},
+            {"note": "Capacitors and variable-speed drives can store a dangerous charge after power is off. Follow the manual's wait time and verify with a meter.", "kind": "safety"}
+          ],
+          "refs": ["osha-1910-333", "nfpa-70e", "esfi-test-before-touch", "osha-electrical"]
+        },
+        {
+          "heading": "Lockout / tagout (LOTO)",
+          "body": [
+            "OSHA 29 CFR 1910.147 requires an energy control program for servicing equipment where unexpected start-up or release of stored energy could cause injury. Typical steps:",
+            {"list": [
+              "1. Prepare: identify all energy sources (electrical, refrigerant pressure, water/glycol, stored mechanical energy).",
+              "2. Notify affected people and shut the equipment down normally.",
+              "3. Isolate energy at the disconnect(s).",
+              "4. Apply **your own** lock and tag.",
+              "5. Release or control stored energy (discharge capacitors, let fans stop, relieve pressure if required).",
+              "6. **Verify** isolation: try to start, and test for absence of voltage.",
+              "7. When done: remove tools, replace guards, notify people; only the person who applied a lock removes it."
+            ]},
+            "A unit's front-panel on/off or the controller turning the unit off is **not** lockout. Controls can restart the unit (auto-restart after power return, remote start, teamwork/standby)."
+          ],
+          "refs": ["osha-loto", "osha-1910-147"]
+        },
+        {
+          "heading": "Disconnects, fuses and breakers",
+          "body": [
+            {"list": [
+              "The **main disconnect** isolates unit power; many Liebert units have a door-interlocked disconnect. Some components may remain energized - check the diagram.",
+              "**Fuses** open once and must be replaced with the same type and rating. **Circuit breakers** trip and can be reset after the cause is found.",
+              "A blown fuse or tripped breaker is a symptom: look for a short, ground fault, failed motor or overload before restoring power.",
+              "Never replace a fuse with a larger rating."
+            ]}
+          ]
+        },
+        {
+          "heading": "Contactors, relays and control circuits",
+          "body": [
+            {"list": [
+              "A **contactor** is a heavy-duty relay that switches motor loads (compressor, fans, heaters). A low-voltage **coil** pulls in the contacts.",
+              "A **relay** switches control-level signals. **Overload** devices open on excess current.",
+              "Check: is the coil getting its control voltage? Are the contacts pitted or welded? Is there voltage on both line and load sides when closed?",
+              "**Transformers** step line voltage down to control voltage (commonly 24 VAC in HVAC controls). A shorted control circuit can blow the transformer fuse.",
+              "Safety devices (HP switch, overloads, fire/smoke shutdown, condensate float) are usually wired **in series** in the control circuit; one open device stops the load."
+            ]}
+          ]
+        },
+        {
+          "heading": "Motors and capacitors",
+          "body": [
+            {"list": [
+              "Single-phase motors may use a **run capacitor** (and sometimes a start capacitor). A weak capacitor causes hard starting, high amps and overheating.",
+              "Discharge a capacitor safely and test it with a meter that measures microfarads; compare to its rating and tolerance.",
+              "Three-phase motors: check for voltage imbalance, phase loss and correct rotation.",
+              "Measure running amps and compare to nameplate (RLA/FLA)."
+            ]}
+          ]
+        },
+        {
+          "heading": "Sensors and wiring diagrams",
+          "body": [
+            "Temperature and humidity sensors feed the controller. A failed or mis-located sensor makes the unit respond to false conditions. Verify a suspect reading with a calibrated instrument at the sensor location before replacing parts.",
+            "The **wiring diagram** (usually inside the unit's electrical panel door) is model-specific. Use it to trace control circuits, find terminal numbers, and identify which safeties are in series."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "Controls & iCOM",
+      "summary": "Setpoints, proportional band, deadband, alarms, teamwork",
+      "examWeight": 3,
+      "intro": "Liebert iCOM is the controller and monitoring platform on many Vertiv thermal units. General control theory is the same everywhere; menus, parameter names and available features vary by unit and firmware - use the iCOM manual for the specific unit.",
+      "sections": [
+        {
+          "heading": "What iCOM does",
+          "body": [
+            {"list": [
+              "Reads sensors (return/supply/remote rack temperature, humidity, pressures, flow switches).",
+              "Calculates demand and controls compressors, valves, fans, humidifier and reheat.",
+              "Generates **alarms and warnings**, and keeps an **event log** with time stamps.",
+              "Networks units together (**U2U / unit-to-unit**) for teamwork, lead/lag rotation and standby units.",
+              "Provides communication to building management/monitoring systems (via network cards/protocols, model dependent)."
+            ]},
+            "Variants include unit-mounted iCOM displays (small and large/touchscreen), iCOM CMS for small systems such as Mini-Mate2 and DataMate, and iCOM-S for supervising many units."
+          ],
+          "refs": ["icom-getting-started", "icom-cms", "icom-s-manual", "u2u-setup"]
+        },
+        {
+          "heading": "Setpoint, proportional band and deadband",
+          "body": [
+            "**Setpoint** is the target value (temperature or humidity).",
+            "**Proportional band** is the range over which the controller ramps output from 0% to 100%. In the legacy iCOM manual, the band is divided into two equal halves - cooling above setpoint, heating below.",
+            "**Deadband** is an optional zone centered on the setpoint where the controller acts as if it were exactly at setpoint. It reduces cycling and extends component life.",
+            {"note": "Example (from the legacy iCOM manual's style of example): setpoint 70 F, proportional band 8 F, deadband 2 F. Cooling half = 4 F. Deadband covers 69-71 F. Cooling demand starts above 71 F and reaches 100% at about 75 F.", "kind": "info"},
+            {"list": [
+              "Wider proportional band: gentler response, more stable, but temperature may wander further from setpoint.",
+              "Narrower band: faster response but more cycling/hunting.",
+              "Control modes include proportional, PI (adds integral action to remove steady offset) and 'intelligent' control - availability depends on firmware."
+            ]}
+          ],
+          "refs": ["icom-legacy-manual"]
+        },
+        {
+          "heading": "Cooling demand and sensors",
+          "body": [
+            "iCOM shows cooling demand as a percentage. Ask: Does the demand make sense for the measured temperature and setpoint? Is the equipment actually delivering what is being demanded?",
+            {"list": [
+              "If demand is 100% and the room is still hot - the problem is delivery (refrigeration, airflow, water) or the load exceeds capacity.",
+              "If demand is 0% and the room is hot - check the sensor reading, sensor location and setpoints.",
+              "Control may be based on return air, supply air or remote rack sensors; know which sensor the unit is controlling to."
+            ]}
+          ]
+        },
+        {
+          "heading": "Alarms",
+          "body": [
+            {"list": [
+              "Read the alarm text and the **event log** before acting. The first alarm in a sequence is often the root cause; later alarms can be consequences.",
+              "Typical alarm categories: high/low temperature or humidity, high head pressure, low suction pressure, loss of airflow, clogged filters, water under floor, humidifier problem, condensate high water, sensor failure, communication loss, power/phase problems.",
+              "Silencing an alarm stops the audible annunciation; it does not fix the condition. Some alarms require a manual reset after the cause is corrected.",
+              "Do not disable alarms to stop nuisance calls - investigate why they occur."
+            ]},
+            {"note": "Exact alarm names, delays and reset behavior depend on the unit and firmware. Look them up in the unit's iCOM manual.", "kind": "info"}
+          ],
+          "refs": ["icom-getting-started"]
+        },
+        {
+          "heading": "Operating modes and teamwork",
+          "body": [
+            "Units networked by U2U can work together: sharing sensor data, preventing one unit from humidifying while a neighbor dehumidifies, rotating lead/standby units, and starting a standby unit if a running unit fails. Teamwork modes and their names depend on firmware.",
+            "Units may also have auto-restart after a power interruption and staggered restart times to limit inrush."
+          ],
+          "refs": ["u2u-setup", "icom-getting-started"]
+        }
+      ]
+    },
+    {
+      "id": "humidity",
+      "title": "Humidity Control & Reheat",
+      "summary": "Dehumidification, humidifiers, reheat and how they interact",
+      "examWeight": 1.5,
+      "intro": "It is not known how much humidity and reheat appear on the exam, so this topic has a lower weight. Know the basic sequences and how temperature and humidity control affect each other.",
+      "sections": [
+        {
+          "heading": "Why humidity matters",
+          "body": [
+            "Too much moisture risks condensation and corrosion; too little increases static electricity risk. ASHRAE data center guidelines define ranges (often expressed as dew point). The site's setpoints rule.",
+            "**Relative humidity (RH)** depends on temperature: the same moisture content gives a lower RH in warmer air. **Dew point** measures actual moisture content and does not change with temperature."
+          ],
+          "refs": ["ashrae-tc99"]
+        },
+        {
+          "heading": "Dehumidification",
+          "body": [
+            "Moisture is removed by cooling air below its dew point so water condenses on the evaporator coil and drains away. To dehumidify, a unit typically runs cooling harder, may lower the coil temperature (for example by reducing airflow on some units), and collects condensate in the drain pan.",
+            "Because dehumidifying also cools the air, the room can become overcooled. That is where **reheat** comes in."
+          ]
+        },
+        {
+          "heading": "Reheat",
+          "body": [
+            "Reheat adds sensible heat back so the unit can keep dehumidifying without driving room temperature below setpoint. Types found on Liebert units (model specific):",
+            {"list": [
+              "**Electric reheat** - resistance heating elements, often staged or SCR-controlled. Protected by high-limit thermostats. Need airflow when energized.",
+              "**Hot gas reheat** - routes hot discharge gas through a reheat coil (uses rejected heat).",
+              "**Hot water reheat** - a hot-water coil and valve."
+            ]},
+            {"note": "Electric reheat elements get extremely hot and are line-voltage. Lock out and allow to cool before service. A tripped high-limit points to an airflow problem.", "kind": "safety"}
+          ],
+          "refs": ["ds-manual"]
+        },
+        {
+          "heading": "Humidifiers",
+          "body": [
+            {"list": [
+              "**Infrared humidifier** - high-intensity quartz lamps above a water pan evaporate water; needs periodic pan cleaning/flushing because minerals build up.",
+              "**Steam-generating (canister/electrode) humidifier** - current passes through water between electrodes to make steam. The canister is replaced when spent; water conductivity affects operation.",
+              "Common humidifier faults: no water supply, fill valve or drain valve stuck, scale buildup, high/low water level, canister end of life."
+            ]},
+            "Humidifiers need a water supply and a drain, and add line-voltage loads. Water and electricity together require extra caution."
+          ],
+          "refs": ["ds-manual"]
+        },
+        {
+          "heading": "How temperature and humidity control interact",
+          "body": [
+            {"list": [
+              "Dehumidification causes cooling; reheat counteracts it.",
+              "Humidifying an over-cooled coil area can be wasteful; networked units coordinate so neighbors do not fight (one humidifying while another dehumidifies).",
+              "A temperature setpoint change changes RH readings even if moisture content stays the same.",
+              "Many data centers widen humidity limits or control by dew point, so reheat and humidifiers run less. Settings are site and model specific."
+            ]}
+          ],
+          "refs": ["u2u-setup"]
+        }
+      ]
+    },
+    {
+      "id": "equipment",
+      "title": "Equipment Identification",
+      "summary": "PDX, PCW, DS, DSE, CRV, Mini-Mate, DataMate and more",
+      "examWeight": 2,
+      "intro": "The exam covers mixed thermal management equipment. You do not need every specification, but you should recognize each family, what it is used for, and how it rejects heat. Capacities below are approximate and from Vertiv publications; check the current product page or manual for exact figures.",
+      "sections": [
+        {
+          "heading": "Perimeter (room) units",
+          "body": [
+            {"table": [
+              ["Family", "Type", "Key points"],
+              ["**Liebert PDX**", "DX (compressor) floor-mount", "Upflow/downflow perimeter unit; iCOM control; air, water or glycol heat rejection depending on model; compact models about 11-29 kW, larger models higher."],
+              ["**Liebert PCW**", "Chilled water floor-mount", "No compressor. Modulating chilled-water valve and EC fans; iCOM control."],
+              ["**Liebert DS**", "DX perimeter", "Long-running large DX perimeter platform (about 35-105 kW per the 60 Hz manual); options include digital scroll compressors, EC fans, humidifier and reheat."],
+              ["**Liebert DSE**", "DX + pumped refrigerant economizer", "Pairs with Liebert MC condenser; the **EconoPhase** pumped refrigerant economizer reduces or eliminates compressor run time in cold weather, without outside air or water."],
+              ["**Liebert CW**", "Chilled water (legacy large)", "Older chilled-water perimeter family."],
+              ["**Vertiv CoolPhase Perimeter**", "DX, low-GWP refrigerant", "Newer perimeter products using lower-GWP refrigerants."]
+            ]}
+          ],
+          "refs": ["pdx-product", "pcw-product", "pdx-pcw-manual", "ds-manual", "dse-manual", "econophase", "coolphase-ds"]
+        },
+        {
+          "heading": "Row-based and rack-level",
+          "body": [
+            {"list": [
+              "**Liebert CRV** - in-row cooling unit placed between racks, for high-density rows; draws air from the hot aisle and supplies cold air to the cold aisle; DX or chilled-water versions; iCOM with rack inlet sensors.",
+              "**Liebert XD family** - pumped refrigerant cooling placed close to racks (overhead, rear-door or row modules) for high density (legacy/family details vary).",
+              "**Liquid cooling** (e.g. coolant distribution units) is a growing Vertiv area but is outside typical Level 1 room-cooling service."
+            ]}
+          ],
+          "refs": ["crv-datasheet", "icom-crv"]
+        },
+        {
+          "heading": "Small-room systems",
+          "body": [
+            {"list": [
+              "**Liebert Mini-Mate2** - ceiling-mounted small-room precision cooling (about 1 to 5 tons); evaporator above the ceiling; split air-cooled (with outdoor condensing unit or condenser) or water/glycol versions. Uses POE oil.",
+              "**Liebert Mini-Mate (variable capacity)** - ceiling-mounted unit paired with a prop-fan digital (PFD) condensing unit containing a digital scroll.",
+              "**Liebert DataMate** - small floor-or-wall-mount unit for small computer rooms (about 1.5-3 tons).",
+              "**Liebert Challenger 3000** - legacy 3-5 ton floor-mount unit.",
+              "Small systems may use the **iCOM CMS** controller."
+            ]}
+          ],
+          "refs": ["minimate2-23", "minimate2-1", "minimate-vc", "pfd-condensing", "datamate", "icom-cms"]
+        },
+        {
+          "heading": "Heat rejection equipment",
+          "body": [
+            {"list": [
+              "**Liebert MC condenser** - outdoor microchannel air-cooled condenser with EC fans and speed control.",
+              "**Prop-fan condensers / condensing units** - outdoor units for split systems.",
+              "**Drycoolers** - cool glycol loops for glycol-cooled units.",
+              "**Chillers** - produce chilled water for PCW/CW/CRV-CW units."
+            ]}
+          ],
+          "refs": ["econophase", "pfd-condensing"]
+        },
+        {
+          "heading": "Identifying a unit in the field",
+          "body": [
+            "Always read the **nameplate**: model number, serial number, voltage/phase, refrigerant type and charge, and MCA/MOCP. The model number determines which manual, wiring diagram and parts apply. Vertiv's support site lets you look up documents by model.",
+            {"note": "Two units that look similar may have different compressors, controls, refrigerants and options. Never assume - confirm with the nameplate and documentation.", "kind": "info"}
+          ],
+          "refs": ["vertiv-support"]
+        }
+      ]
+    },
+    {
+      "id": "maintenance",
+      "title": "Preventive Maintenance",
+      "summary": "Inspections, filters, coils, drains, documentation",
+      "examWeight": 3,
+      "intro": "Preventive maintenance (PM) keeps critical cooling running and catches small problems early. Follow the PM schedule in the unit manual and the site's procedures.",
+      "sections": [
+        {
+          "heading": "Before you start",
+          "body": [
+            {"list": [
+              "Check in with the site; coordinate taking a unit out of service (is there redundancy? Will another unit cover the load?).",
+              "Review **active alarms and alarm/event history** on the controller and note operating readings before shutting down.",
+              "Have the correct manual and wiring diagram for the model.",
+              "Lock out / tag out before opening electrical panels or reaching near fans."
+            ]}
+          ],
+          "refs": ["techtarget-crac-pm", "osha-loto"]
+        },
+        {
+          "heading": "Typical PM checklist items",
+          "body": [
+            {"list": [
+              "**Filters**: inspect/replace; check filter clog switch operation.",
+              "**Coils**: evaporator and condenser - clean, straighten fins as needed, look for oil stains (leak sign).",
+              "**Fans/blowers**: bearings, noise, vibration, belts (tension and wear), EC fan operation.",
+              "**Electrical**: tighten connections (with power locked out), inspect contactors for pitting, check for heat discoloration, measure voltages and amps.",
+              "**Refrigeration**: suction/discharge pressures, superheat/subcooling where applicable, sight glass, signs of leaks (certified technicians only for refrigerant work).",
+              "**Condensate**: drain pan, trap, drain line and **condensate pump** operation; float/high-water switch.",
+              "**Humidifier**: pan or canister condition, fill and drain operation.",
+              "**Reheat**: element condition, high limits.",
+              "**Water/glycol**: valves, strainers, leaks, glycol concentration where applicable.",
+              "**Leak detection**: water-under-floor sensors working.",
+              "**Controls**: setpoints match site requirements, sensors read correctly, alarms annunciate."
+            ]}
+          ],
+          "refs": ["ds-manual", "datamate", "pdx-pcw-manual", "techtarget-crac-pm"]
+        },
+        {
+          "heading": "Condensate drains and pumps",
+          "body": [
+            "Every cooling coil makes condensate when it dehumidifies. Humidifiers also drain water. A blocked drain, failed condensate pump or stuck float can cause overflow, water under the floor and water damage.",
+            {"list": [
+              "Check the trap and line are clear and properly sloped; flush if needed.",
+              "Test the condensate pump by adding water to the reservoir; confirm it pumps and the high-water safety works.",
+              "Many units have a high-water or condensate alarm that can shut down cooling/humidification to prevent overflow."
+            ]}
+          ],
+          "refs": ["ds-manual", "minimate2-23"]
+        },
+        {
+          "heading": "Documentation",
+          "body": [
+            {"list": [
+              "Record readings (temperatures, pressures, amps, voltages), parts replaced, filter change dates, alarms found and corrective actions.",
+              "Good records show trends (slowly rising head pressure, rising amps) before failure.",
+              "Report deficiencies you cannot correct and any safety issues.",
+              "Return the unit to service and confirm it is operating and alarms are clear before leaving."
+            ]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "troubleshooting",
+      "title": "Troubleshooting Method",
+      "summary": "A safe, logical process for service calls",
+      "examWeight": 3,
+      "intro": "Good troubleshooting is a process, not a guess. The same steps work for almost any alarm or complaint.",
+      "sections": [
+        {
+          "heading": "A step-by-step process",
+          "body": [
+            {"list": [
+              "**1. Get the complaint.** Talk to the site contact: what happened, when, any recent work or power events?",
+              "**2. Stay safe.** Identify hazards, follow site rules and LOTO when needed.",
+              "**3. Verify the condition.** Is the room really hot? Measure with your own instrument.",
+              "**4. Gather information.** Active alarms, event log, operating status, setpoints, cooling demand, readings.",
+              "**5. Check the simple things first.** Power, disconnects, filters, airflow, drains, setpoints, obvious damage.",
+              "**6. Narrow down.** Use readings (pressures, temperatures, amps, voltages) to split the system into 'working' and 'not working' parts.",
+              "**7. Confirm the root cause** before replacing parts. Ask 'why did this fail?'",
+              "**8. Repair, then verify** the unit runs correctly and alarms clear.",
+              "**9. Document and communicate** findings and actions."
+            ]}
+          ],
+          "refs": ["vertiv-tm101i", "hvacr-compressor-diag"]
+        },
+        {
+          "heading": "Common symptom - likely cause table",
+          "body": [
+            {"table": [
+              ["Symptom", "Check first"],
+              ["High head pressure", "Condenser coil dirty, condenser fans/speed control, water/glycol flow, overcharge, non-condensables, hot recirculation at condenser"],
+              ["Low suction pressure", "Dirty filters/low airflow, low charge/leak, restricted drier or metering device, iced coil, low head pressure in cold weather"],
+              ["Compressor won't start", "Control demand, safety lockouts, power/fuses, contactor, overload, capacitor (single-phase), then compressor"],
+              ["Runs but poor cooling", "Airflow, charge, compressor pumping (pressures/amps), digital scroll stuck unloaded, valves"],
+              ["Water leaking", "Drain blocked, pump failed, trap, humidifier drain/fill, coil carryover, chilled-water leak"],
+              ["Humidity out of range", "Sensor accuracy, setpoints, humidifier water/canister, dehum operation, neighboring units fighting"],
+              ["Odd sensor reading", "Compare with calibrated meter, sensor location, wiring, controller calibration offset"]
+            ]}
+          ]
+        },
+        {
+          "heading": "Things a good technician does not do",
+          "body": [
+            {"list": [
+              "Bypass or jumper safety devices to keep a unit running.",
+              "Add refrigerant without diagnosing the cause (and without 608 certification).",
+              "Replace parts based on a guess.",
+              "Disable alarms instead of fixing causes.",
+              "Work inside energized equipment without qualification, PPE and procedures.",
+              "Change controller settings at a customer site without authorization and documentation."
+            ]},
+            {"note": "When something is beyond your training or authorization, stop, make the unit safe, and escalate.", "kind": "safety"}
+          ]
+        }
+      ]
+    }
+  ]
+}

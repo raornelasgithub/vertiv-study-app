@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Question Checker</title>
+<style>
+  :root { --navy:#14213d; --blue:#1d6fd8; --green:#18804a; --red:#c62f2f; --amber:#a86200; --bg:#f2f4f7; --line:#d9dee7; }
+  body { margin:0; background:var(--bg); color:#1b2230; font:16px/1.5 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  header { background:var(--navy); color:#fff; padding:14px 16px; }
+  header h1 { margin:0; font-size:1.2rem; }
+  main { max-width:900px; margin:0 auto; padding:16px; }
+  .card { background:#fff; border-radius:12px; padding:16px; margin-bottom:14px; box-shadow:0 1px 4px rgba(0,0,0,.08); }
+  .ok { color:var(--green); font-weight:700; } .err { color:var(--red); } .warn { color:var(--amber); }
+  li { margin:4px 0; }
+  label { display:block; font-weight:600; margin-top:10px; }
+  input, select, textarea { width:100%; box-sizing:border-box; padding:8px; font:inherit; border:1px solid var(--line); border-radius:8px; }
+  textarea { min-height:70px; }
+  button { background:var(--blue); color:#fff; border:0; border-radius:8px; padding:10px 16px; font:inherit; font-weight:600; cursor:pointer; margin-top:12px; }
+  pre { background:#0f172a; color:#e2e8f0; padding:12px; border-radius:8px; white-space:pre-wrap; word-break:break-word; }
+  table { border-collapse:collapse; } td, th { border:1px solid var(--line); padding:4px 10px; text-align:left; }
+</style>
+</head>
+<body>
+<header><h1>Question Bank Checker &amp; Question Maker</h1></header>
+<main>
+  <div class="card">
+    <p>This page checks the files in the <strong>data</strong> folder for mistakes. Open it through the local test server (<code>http://localhost:8080/tools/check-questions.html</code>) or on your published site (add <code>/tools/check-questions.html</code> to the address).</p>
+    <button id="recheck" type="button">Check again</button>
+    <div id="summary"></div>
+  </div>
+  <div class="card"><h2>Problems found</h2><div id="problems">Checking&hellip;</div></div>
+
+  <div class="card">
+    <h2>Make a new question</h2>
+    <p>Fill in the boxes and press <strong>Create question text</strong>. Then copy the result and paste it into <code>data/questions.json</code> (instructions appear below the result).</p>
+    <label for="nId">Question ID (must be unique)</label><input id="nId">
+    <label for="nTopic">Topic</label><select id="nTopic"></select>
+    <label for="nDiff">Difficulty</label><select id="nDiff"><option>basic</option><option>intermediate</option><option>advanced</option></select>
+    <label for="nQ">Question</label><textarea id="nQ"></textarea>
+    <label for="nA">Choice A</label><input id="nA">
+    <label for="nB">Choice B</label><input id="nB">
+    <label for="nC">Choice C</label><input id="nC">
+    <label for="nD">Choice D</label><input id="nD">
+    <label for="nAns">Correct answer</label><select id="nAns"><option>A</option><option>B</option><option>C</option><option>D</option></select>
+    <label for="nExp">Explanation (why the correct answer is right)</label><textarea id="nExp"></textarea>
+    <label for="nWhy">Why the other answers are wrong (optional)</label><textarea id="nWhy"></textarea>
+    <label for="nApplies">Applies to which equipment (optional)</label><input id="nApplies">
+    <label for="nRefs">Reference IDs, separated by commas (optional - see data/references.json)</label><input id="nRefs">
+    <label for="nConf">Confidence</label><select id="nConf"><option value="general">general (standard technical principle)</option><option value="verified">verified (checked in a linked source)</option><option value="model-specific">model-specific</option></select>
+    <button id="make" type="button">Create question text</button>
+    <div id="made"></div>
+  </div>
+</main>
+<script>
+(function () {
+  var TOPICS = [], REFS = {}, QIDS = {};
+  function el(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+  function load(path) {
+    return fetch(path, { cache: 'no-store' }).then(function (r) {
+      if (!r.ok) throw new Error(path + ': file not found (' + r.status + ')');
+      return r.text();
+    }).then(function (text) {
+      try { return JSON.parse(text); }
+      catch (e) {
+        var m = /position (\d+)/.exec(e.message), where = '';
+        if (m) { var pos = +m[1]; var line = text.slice(0, pos).split('\n').length; where = ' (near line ' + line + ')'; }
+        throw new Error(path + ' has a formatting error' + where + ': ' + e.message + '. Common causes: a missing comma between items, a comma after the last item, or a straight double quote (") inside text - use a single quote instead.');
+      }
+    });
+  }
+  function check() {
+    el('problems').textContent = 'Checking…'; el('summary').innerHTML = '';
+    Promise.all(['../data/questions.json', '../data/topics.json', '../data/references.json', '../data/scenarios.json'].map(load)).then(function (d) {
+      var qs = d[0].questions, topics = d[1].topics, refs = d[2].references, scen = d[3].scenarios;
+      var errs = [], warns = [];
+      TOPICS = topics.map(function (t) { return t.id; });
+      refs.forEach(function (r) { if (REFS[r.id]) errs.push('Reference id used twice: ' + r.id); REFS[r.id] = r; if (!/^https?:\/\//.test(r.url || '')) errs.push('Reference ' + r.id + ' has no valid url'); });
+      QIDS = {};
+      var byTopic = {}, byDiff = {}, letters = { A: 0, B: 0, C: 0, D: 0 }, questionText = {};
+      qs.forEach(function (q, i) {
+        var tag = (q.id || ('#' + (i + 1)));
+        if (!q.id) errs.push('Question number ' + (i + 1) + ' has no id');
+        else if (QIDS[q.id]) errs.push('Question id used twice: ' + q.id); else QIDS[q.id] = 1;
+        if (TOPICS.indexOf(q.topic) === -1) errs.push(tag + ': topic "' + q.topic + '" is not a topic id in topics.json');
+        if (['basic', 'intermediate', 'advanced'].indexOf(q.difficulty) === -1) errs.push(tag + ': difficulty must be basic, intermediate or advanced');
+        if (!q.question || q.question.length < 10) errs.push(tag + ': question text is missing or too short');
+        if (!Array.isArray(q.choices) || q.choices.length !== 4) errs.push(tag + ': must have exactly 4 choices');
+        else {
+          var seen = {};
+          q.choices.forEach(function (c) {
+            var k = String(c).trim().toLowerCase();
+            if (!k) errs.push(tag + ': a choice is empty');
+            if (seen[k]) errs.push(tag + ': duplicate choice "' + c + '"'); seen[k] = 1;
+          });
+        }
+        var a = String(q.answer || '').trim().toUpperCase();
+        if (['A', 'B', 'C', 'D'].indexOf(a) === -1) errs.push(tag + ': answer must be one letter A, B, C or D'); else letters[a]++;
+        if (!q.explanation || q.explanation.length < 20) errs.push(tag + ': explanation is missing or too short');
+        if (['verified', 'general', 'model-specific'].indexOf(q.confidence) === -1) errs.push(tag + ': confidence must be verified, general or model-specific');
+        (q.refs || []).forEach(function (r) { if (!REFS[r]) errs.push(tag + ': reference id "' + r + '" is not in references.json'); });
+        if (q.confidence === 'verified' && !(q.refs && q.refs.length)) warns.push(tag + ': marked verified but has no refs');
+        if (/\b(choice|answer|option)\s+[ABCD]\b/i.test((q.explanation || '') + ' ' + (q.whyWrong || ''))) warns.push(tag + ': explanation mentions a choice letter, but the app shuffles choices');
+        var qt = String(q.question || '').trim().toLowerCase();
+        if (questionText[qt]) warns.push(tag + ': same question text as ' + questionText[qt]); questionText[qt] = tag;
+        byTopic[q.topic] = (byTopic[q.topic] || 0) + 1; byDiff[q.difficulty] = (byDiff[q.difficulty] || 0) + 1;
+      });
+      scen.forEach(function (s) {
+        (s.steps || []).forEach(function (st, i) {
+          var tag = 'Scenario ' + s.id + ' step ' + (i + 1);
+          if (!Array.isArray(st.choices) || st.choices.length < 2) errs.push(tag + ': needs choices');
+          if (['A', 'B', 'C', 'D'].indexOf(String(st.answer).toUpperCase()) === -1 || ['A', 'B', 'C', 'D'].indexOf(String(st.answer).toUpperCase()) >= (st.choices || []).length) errs.push(tag + ': answer letter invalid');
+        });
+        (s.refs || []).forEach(function (r) { if (!REFS[r]) errs.push('Scenario ' + s.id + ': reference "' + r + '" not found'); });
+      });
+      topics.forEach(function (t) { t.sections.forEach(function (sec) { (sec.refs || []).forEach(function (r) { if (!REFS[r]) errs.push('Topic ' + t.id + ': reference "' + r + '" not found'); }); }); });
+      var rows = TOPICS.map(function (t) { return '<tr><td>' + esc(t) + '</td><td>' + (byTopic[t] || 0) + '</td></tr>'; }).join('');
+      el('summary').innerHTML = '<p class="' + (errs.length ? 'err' : 'ok') + '">' + (errs.length ? errs.length + ' problem(s) must be fixed.' : 'All files are OK.') + '</p>' +
+        '<p><strong>' + qs.length + '</strong> questions (basic ' + (byDiff.basic || 0) + ', intermediate ' + (byDiff.intermediate || 0) + ', advanced ' + (byDiff.advanced || 0) + '), ' +
+        scen.length + ' scenarios, ' + topics.length + ' topics, ' + refs.length + ' references.</p><table><tr><th>Topic</th><th>Questions</th></tr>' + rows + '</table>';
+      el('problems').innerHTML = (errs.length ? '<ul>' + errs.map(function (e) { return '<li class="err">' + esc(e) + '</li>'; }).join('') + '</ul>' : '<p class="ok">No errors.</p>') +
+        (warns.length ? '<h3>Warnings (optional to fix)</h3><ul>' + warns.map(function (e) { return '<li class="warn">' + esc(e) + '</li>'; }).join('') + '</ul>' : '');
+      el('nTopic').innerHTML = TOPICS.map(function (t) { return '<option>' + esc(t) + '</option>'; }).join('');
+      window.__checkResult = { errors: errs, warnings: warns, count: qs.length };
+    }).catch(function (e) {
+      el('problems').innerHTML = '<p class="err">' + esc(e.message) + '</p>';
+      window.__checkResult = { fatal: e.message };
+    });
+  }
+  el('recheck').onclick = check;
+  el('make').onclick = function () {
+    var q = {
+      id: el('nId').value.trim(), topic: el('nTopic').value, difficulty: el('nDiff').value,
+      question: el('nQ').value.trim(),
+      choices: [el('nA').value.trim(), el('nB').value.trim(), el('nC').value.trim(), el('nD').value.trim()],
+      answer: el('nAns').value, explanation: el('nExp').value.trim()
+    };
+    if (el('nWhy').value.trim()) q.whyWrong = el('nWhy').value.trim();
+    var refs = el('nRefs').value.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+    if (refs.length) q.refs = refs;
+    if (el('nApplies').value.trim()) q.applies = el('nApplies').value.trim();
+    q.confidence = el('nConf').value;
+    var probs = [];
+    if (!q.id) probs.push('Enter an ID.'); else if (QIDS[q.id]) probs.push('That ID is already used.');
+    if (!q.question) probs.push('Enter the question.');
+    if (q.choices.some(function (c) { return !c; })) probs.push('Fill in all four choices.');
+    if (!q.explanation) probs.push('Enter an explanation.');
+    refs.forEach(function (r) { if (!REFS[r]) probs.push('Reference "' + r + '" is not in references.json.'); });
+    if (probs.length) { el('made').innerHTML = '<p class="err">' + probs.map(esc).join('<br>') + '</p>'; return; }
+    el('made').innerHTML = '<p><strong>Copy everything in the dark box</strong> (including the comma at the start):</p><pre id="out">,\n' + esc(JSON.stringify(q)) + '</pre>' +
+      '<ol><li>Open <code>data/questions.json</code>.</li><li>Scroll to the very end. The last lines look like <code>}</code> then <code>]</code> then <code>}</code>.</li>' +
+      '<li>Click just after the <code>}</code> that ends the last question (right before the line with <code>]</code>) and paste.</li><li>Save the file and press <strong>Check again</strong> on this page.</li></ol>';
+  };
+  check();
+})();
+</script>
+</body>
+</html>

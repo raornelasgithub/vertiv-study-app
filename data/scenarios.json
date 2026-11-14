@@ -1,0 +1,210 @@
+{
+  "_help": "Troubleshooting scenarios. Each has id, title, summary, situation, observations (list), steps (each with kind, prompt, choices (4), answer letter, explanation), takeaways (list), safety (optional), applies (optional), refs (optional).",
+  "scenarios": [
+    {
+      "id": "high-temp-alarm",
+      "title": "High room temperature alarm",
+      "summary": "Site reports a high temperature alarm on a perimeter DX unit.",
+      "situation": "You arrive at a small data center. The site contact says a **High Return Air Temperature** alarm started about an hour ago on one of three DX perimeter units.",
+      "observations": ["The iCOM display shows the alarm and 100% cooling demand.", "The room feels warm near that unit.", "No work was done recently, according to the site."],
+      "steps": [
+        {"kind": "What to check first", "prompt": "What should you do first?", "choices": ["Verify the actual temperature with your own instrument and review active alarms and the event log", "Replace the return air sensor", "Add refrigerant", "Turn off the other two units to isolate the problem"], "answer": "A", "explanation": "Confirm the condition is real and gather information. The event log may show an earlier alarm (for example high head pressure) that explains the high temperature."},
+        {"kind": "Information to collect", "prompt": "The event log shows the compressor stopped on a high head pressure alarm 70 minutes ago. Which information is most useful next?", "choices": ["Condenser fan status, condenser coil condition and outdoor conditions", "Humidifier canister age", "Filter brand", "The room's lighting load"], "answer": "A", "explanation": "High head pressure points to the heat rejection side. Check the outdoor condenser: fans running, coil clean, nothing blocking airflow, speed control working."},
+        {"kind": "Possible causes", "prompt": "You find one of two condenser fans not running and the coil partly blocked with cottonwood. What is the right course of action?", "choices": ["With power locked out, diagnose the fan (power, control, capacitor/motor), clean the coil per the manual, then reset the HP switch and verify pressures", "Reset the HP switch and leave", "Jumper the HP switch", "Spray water on the condenser while it runs and leave"], "answer": "A", "explanation": "Fix the causes, then reset the safety and verify head pressure and cooling are normal. Document findings and recommend more frequent coil cleaning if cottonwood is seasonal."}
+      ],
+      "takeaways": ["A high temperature alarm is often a consequence - look for the first alarm in the log.", "High head pressure usually means a heat rejection problem.", "Fix the cause before resetting a safety."],
+      "safety": "Lock out the condenser before working on fans or cleaning the coil. Never bypass the high-pressure switch.",
+      "applies": "Air-cooled DX units (e.g. Liebert DS, PDX with outdoor condenser)",
+      "refs": ["ds-manual", "icom-getting-started"]
+    },
+    {
+      "id": "compressor-no-start",
+      "title": "Compressor will not start",
+      "summary": "Cooling demand present, compressor does nothing.",
+      "situation": "A unit shows cooling demand, the fans are running, but the compressor is not running. There is no humming or clicking from the compressor.",
+      "observations": ["iCOM shows the compressor is called but not running.", "No high- or low-pressure alarm is active.", "The unit was running normally yesterday."],
+      "steps": [
+        {"kind": "What to check first", "prompt": "Which check comes first?", "choices": ["Check alarms/lockouts and whether the control circuit is energizing the compressor contactor coil", "Replace the compressor", "Add refrigerant", "Raise the setpoint"], "answer": "A", "explanation": "Start with the control side: is the controller calling, is a safety or timer holding the compressor off, and does the contactor coil have voltage?"},
+        {"kind": "Information to collect", "prompt": "The contactor is pulled in. You measure correct voltage on the line side, but zero volts on one leg of the load side. What does this indicate?", "choices": ["Failed contactor contacts on that leg", "A bad compressor winding", "Low refrigerant", "Normal operation"], "answer": "A", "explanation": "With the contactor closed, line and load sides should match. A missing leg on the load side means a burned contact. (Measured with proper PPE and procedures.)"},
+        {"kind": "Possible causes", "prompt": "After replacing the contactor (with power locked out), what else should you investigate?", "choices": ["Why the contacts burned - short cycling, low voltage, loose connections or high compressor amps", "Nothing else", "The humidifier water supply", "Filter direction"], "answer": "A", "explanation": "Contacts fail from excessive cycling, arcing from loose connections, or overcurrent. Check the compressor's running amps and voltage after restart."}
+      ],
+      "takeaways": ["Check controls, safeties and power before condemning a compressor.", "Line vs load voltage across a closed contactor quickly identifies failed contacts.", "Always look for the root cause."],
+      "safety": "Measurements on energized circuits require qualification and proper PPE. Lock out before replacing components.",
+      "refs": ["hvacr-compressor-diag"]
+    },
+    {
+      "id": "poor-cooling",
+      "title": "Compressor runs but cooling is poor",
+      "summary": "Compressor is on, but the room won't come down.",
+      "situation": "A DX unit's compressor is running continuously but supply air is only a little cooler than return air. The room is slowly warming.",
+      "observations": ["Filters were changed last month.", "Indoor fans are running at normal speed.", "The unit has a digital scroll compressor."],
+      "steps": [
+        {"kind": "Information to collect", "prompt": "What information will best narrow down the problem?", "choices": ["Suction and discharge pressures, superheat/subcooling, compressor amps and the digital solenoid state", "The age of the building", "The humidifier canister color", "The number of racks"], "answer": "A", "explanation": "Pressures, temperatures and amps tell you whether the compressor is pumping and whether the evaporator is fed. On a digital scroll, also check whether the controller is loading it."},
+        {"kind": "Interpreting readings", "prompt": "Suction and discharge pressures are nearly equal, amps are low, and the controller shows 100% compressor demand. What is a likely cause?", "choices": ["Compressor held unloaded (digital solenoid stuck energized/valve stuck) or compressor not pumping", "Refrigerant overcharge", "Dirty condenser", "Normal digital scroll operation"], "answer": "A", "explanation": "On a digital scroll, energized solenoid = unloaded. If it stays unloaded at full demand, the compressor won't pump. Reverse rotation or internal failure can look similar - verify with the manual's procedure."},
+        {"kind": "Next step", "prompt": "How should you confirm?", "choices": ["Check the controller output and solenoid coil voltage per the wiring diagram, then follow the unit manual's digital solenoid test procedure", "Replace the compressor immediately", "Cut the solenoid wires", "Add refrigerant until pressures separate"], "answer": "A", "explanation": "Confirm whether the coil is being energized when it shouldn't be (control issue) or the valve is stuck (mechanical). Liebert manuals have a section on digital scroll unloading solenoids."}
+      ],
+      "takeaways": ["A running compressor isn't necessarily a pumping compressor.", "Digital scroll: energized = unloaded, de-energized = loaded (Copeland design; confirm per unit).", "Use pressures and amps together."],
+      "safety": "Refrigerant circuit work requires EPA 608 certification.",
+      "applies": "Units with digital scroll compressors (e.g. Liebert DS, DSE)",
+      "refs": ["copeland-digital", "ds-manual", "hvacr-digital-scroll"]
+    },
+    {
+      "id": "condenser-fan-off",
+      "title": "Condenser fan not operating",
+      "summary": "Outdoor condenser fan is stopped in summer.",
+      "situation": "On a hot day, a technician notices an air-cooled unit's outdoor condenser fan is not turning, while the compressor is running and head pressure is climbing.",
+      "observations": ["Outdoor temperature is 95 F.", "Other units' condensers are running.", "The fan blade turns freely by hand with power locked out."],
+      "steps": [
+        {"kind": "What to check first", "prompt": "What should be checked first (following safety procedures)?", "choices": ["Power and fuses/breaker to the fan, and the fan control signal/speed controller", "Indoor filters", "Humidifier", "Room setpoint"], "answer": "A", "explanation": "Confirm the fan is being powered and commanded. A blown fuse, tripped breaker or failed speed controller is common."},
+        {"kind": "Interpreting readings", "prompt": "Voltage is present at the single-phase fan motor and it hums but does not turn. What is the most likely component?", "choices": ["Run capacitor", "TXV", "Humidifier canister", "Filter clog switch"], "answer": "A", "explanation": "A hum with correct voltage and a free-turning blade suggests a failed capacitor. Discharge and test it against its rating before replacing."},
+        {"kind": "Before leaving", "prompt": "After replacing the capacitor, what should you verify?", "choices": ["Fan amps, rotation direction, head pressure returning to normal and no alarms", "Only that the fan turns", "Nothing", "That the HP switch is jumpered"], "answer": "A", "explanation": "Confirm the repair restored normal operation and that head pressure and cooling are back to normal."}
+      ],
+      "takeaways": ["No condenser airflow = rising head pressure.", "Check power and control before the motor.", "A humming PSC motor often has a bad capacitor."],
+      "safety": "Lock out the condenser and verify zero energy before touching the fan or discharging the capacitor. Never try to start a fan by hand.",
+      "refs": ["hvacr-compressor-diag"]
+    },
+    {
+      "id": "restricted-airflow",
+      "title": "Evaporator airflow is restricted",
+      "summary": "Loss of airflow and low suction pressure on a perimeter unit.",
+      "situation": "A unit has a **Clogged Filters** warning and later a **Low Suction Pressure** alarm. The site skipped the last scheduled PM.",
+      "observations": ["Supply airflow feels weak.", "The evaporator coil has frost on the lower section."],
+      "steps": [
+        {"kind": "What to check first", "prompt": "What is the most likely cause to address first?", "choices": ["Dirty filters (and possibly a dirty coil) restricting airflow", "Overcharge", "High outdoor temperature", "Wrong humidity setpoint"], "answer": "A", "explanation": "Reduced airflow lowers the heat delivered to the coil, so suction pressure and coil temperature drop and frost forms."},
+        {"kind": "Safe procedure", "prompt": "How should the iced coil be handled?", "choices": ["Shut off cooling, let the coil defrost completely (fans can run if appropriate), replace filters, then restart and verify", "Chip the ice off with a screwdriver", "Run the compressor to melt it", "Leave the ice"], "answer": "A", "explanation": "Never damage the coil. Let it defrost and correct the airflow before restarting cooling."},
+        {"kind": "Verify", "prompt": "After restart, what confirms the problem is fixed?", "choices": ["Normal airflow, suction pressure/superheat in range, no frost, and alarms cleared", "The alarm was silenced", "The unit is quieter", "Supply air is colder than ever"], "answer": "A", "explanation": "Verify with readings. If suction remains low with clean filters, investigate charge, metering and fans."}
+      ],
+      "takeaways": ["Airflow problems can look like refrigeration problems.", "Fix the cause of ice, don't just remove it.", "Regular filter PM prevents this."],
+      "refs": ["techtarget-crac-pm"]
+    },
+    {
+      "id": "high-head-pressure",
+      "title": "High head pressure on a water-cooled unit",
+      "summary": "Repeated high head pressure trips on a water-cooled DX unit.",
+      "situation": "A water-cooled DX unit trips its high-pressure switch several times a day. The building engineer recently worked on the cooling tower loop.",
+      "observations": ["Condenser water supply temperature looks normal.", "The water regulating valve seems to be barely open."],
+      "steps": [
+        {"kind": "Information to collect", "prompt": "Which information is most useful first?", "choices": ["Condenser water flow and pressure drop, isolation valve positions, strainers, and the regulating valve operation", "Air filter condition", "Humidifier water hardness", "Room occupancy"], "answer": "A", "explanation": "Recent work on the loop and a barely open valve point to water-side flow. Check valves, strainers and the regulating valve."},
+        {"kind": "Possible causes", "prompt": "An isolation valve was left partly closed after the tower work. What should you do?", "choices": ["Coordinate with the building engineer to open it fully, then verify head pressure and reset the HP switch", "Jumper the HP switch", "Remove refrigerant", "Leave it as is"], "answer": "A", "explanation": "Restoring flow fixes the cause. Coordinate with the site before changing building systems."},
+        {"kind": "Follow-up", "prompt": "Head pressure is now normal. What else should you do?", "choices": ["Document the cause and readings, and recommend the site check valve positions after loop work", "Nothing", "Disable the HP alarm", "Lower the room setpoint"], "answer": "A", "explanation": "Good documentation prevents repeat calls and helps the site."}
+      ],
+      "takeaways": ["Water-cooled head pressure depends on water flow and temperature.", "Ask about recent work on connected systems."],
+      "refs": ["ds-manual"]
+    },
+    {
+      "id": "low-suction",
+      "title": "Low suction pressure",
+      "summary": "Low-pressure trips with clean filters.",
+      "situation": "A DX unit trips on low suction pressure. Filters and airflow have been checked and are fine.",
+      "observations": ["Superheat is high.", "Subcooling is low.", "There is an oily stain on a flare fitting near the TXV."],
+      "steps": [
+        {"kind": "Interpreting readings", "prompt": "What do high superheat, low subcooling and an oily fitting suggest?", "choices": ["Low refrigerant charge due to a leak", "Overcharge", "Dirty condenser", "Normal operation"], "answer": "A", "explanation": "This is the classic undercharge pattern, and the oil stain suggests where the leak is."},
+        {"kind": "Correct action", "prompt": "What is the right approach?", "choices": ["A certified technician leak checks to confirm, repairs the leak, replaces the drier if opened, evacuates and charges to specification", "Add refrigerant and leave", "Vent the remaining refrigerant", "Raise the LP switch setting"], "answer": "A", "explanation": "Repair the leak, then charge properly. Topping off wastes refrigerant, may violate EPA rules and the problem returns."},
+        {"kind": "Alternative cause", "prompt": "If there were no leak and readings showed high subcooling with high superheat, what would you suspect instead?", "choices": ["A restriction in the liquid line or metering device (e.g. clogged drier or failing TXV)", "Overcharge only", "Dirty filters", "High head pressure control"], "answer": "A", "explanation": "Liquid backing up (high subcooling) while the evaporator is starved (high superheat) points to a restriction between the condenser and evaporator."}
+      ],
+      "takeaways": ["Use superheat AND subcooling together.", "Low charge means a leak - find it.", "Restrictions show high subcooling + high superheat."],
+      "safety": "Only EPA 608 certified technicians may open the circuit, recover or charge refrigerant.",
+      "refs": ["hvacr-solving-superheat", "epa-608"]
+    },
+    {
+      "id": "water-leak",
+      "title": "Water leaking from the unit",
+      "summary": "Water-under-floor alarm near a perimeter unit.",
+      "situation": "A **Water Under Floor** alarm activates near a downflow unit with a humidifier and a condensate pump.",
+      "observations": ["Water is pooling under the unit.", "The condensate pump reservoir is full."],
+      "steps": [
+        {"kind": "What to do first", "prompt": "What should you do first?", "choices": ["Make the area safe (electrical hazard), and identify the water source", "Start mopping without checking power", "Turn off all units in the room", "Replace the compressor"], "answer": "A", "explanation": "Water and electricity are a dangerous combination. Assess and control hazards, then trace the source."},
+        {"kind": "Possible causes", "prompt": "The pump reservoir is full and the pump is not running. What do you check?", "choices": ["Pump power, float switch, pump motor and discharge line (blocked or check valve stuck)", "Refrigerant charge", "Condenser coil", "Air filters"], "answer": "A", "explanation": "Work through the pump circuit and its discharge path. A clogged discharge line or stuck float is common."},
+        {"kind": "Prevention", "prompt": "After repair, what helps prevent a repeat?", "choices": ["Verify the high-water safety works, clean the drain pan/trap and add pump testing to PM", "Disable the leak detection", "Remove the condensate pump", "Turn off the humidifier permanently"], "answer": "A", "explanation": "A working high-water switch can stop cooling/humidification before overflow. Regular tests catch failing pumps."}
+      ],
+      "takeaways": ["Most water leaks come from drains, pumps and humidifiers.", "Test condensate pumps and high-water safeties at PM."],
+      "safety": "De-energize equipment in wet areas as required before working. Follow site procedures.",
+      "refs": ["ds-manual"]
+    },
+    {
+      "id": "humidity-high",
+      "title": "Humidity above setpoint",
+      "summary": "Room RH is high and won't come down.",
+      "situation": "Room humidity has been 10-15% RH above setpoint for two days. Units report they are dehumidifying.",
+      "observations": ["Construction crews have been propping a room door open.", "Units' reheat is running a lot."],
+      "steps": [
+        {"kind": "Verify", "prompt": "What should you verify first?", "choices": ["The humidity reading with a calibrated instrument", "The refrigerant type", "Fan belt tension", "The UPS battery age"], "answer": "A", "explanation": "Make sure the sensor is right before chasing the problem."},
+        {"kind": "Possible causes", "prompt": "Readings are correct and the units' coils are cold. What is the most likely cause?", "choices": ["Moisture entering the room through the propped-open door (infiltration)", "A failed humidifier", "Low head pressure", "Phase reversal"], "answer": "A", "explanation": "Outside air carries moisture. Precision units are mostly sized for sensible loads and can be overwhelmed by infiltration."},
+        {"kind": "Action", "prompt": "What is the best action?", "choices": ["Inform the site so the door is kept closed, and monitor recovery", "Lower the humidity setpoint further", "Turn off reheat permanently", "Add refrigerant"], "answer": "A", "explanation": "Fix the source. Changing setpoints won't solve infiltration."}
+      ],
+      "takeaways": ["Verify sensors first.", "Check for moisture sources outside the units."],
+      "refs": ["ashrae-tc99"]
+    },
+    {
+      "id": "sensor-wrong",
+      "title": "Temperature sensor reading seems wrong",
+      "summary": "Display says the room is cool but it's hot.",
+      "situation": "The site says the room is hot. The unit's display shows a return temperature of 68 F and 0% cooling demand.",
+      "observations": ["Your calibrated thermometer reads 82 F at the unit's return.", "The sensor is mounted near the return opening."],
+      "steps": [
+        {"kind": "What to check", "prompt": "What is the most likely problem?", "choices": ["The return temperature sensor (or its wiring/offset) is reporting incorrectly", "The compressor failed", "Refrigerant is low", "The filters are dirty"], "answer": "A", "explanation": "The controller isn't calling for cooling because it believes the room is cool. The sensor reading is the issue."},
+        {"kind": "Information to collect", "prompt": "What should you check before replacing the sensor?", "choices": ["Wiring and connectors, the controller's calibration offset setting, and whether the unit is controlling from a different sensor", "The humidifier canister", "The condenser coil", "Fan belt"], "answer": "A", "explanation": "A wrong offset or the wrong control sensor selection can look like a failed sensor."},
+        {"kind": "Verify", "prompt": "After correcting the issue, how do you confirm?", "choices": ["Compare the displayed reading with your calibrated instrument and confirm cooling demand responds", "Silence the alarm", "Reset the event log", "Turn off the unit"], "answer": "A", "explanation": "Verify the reading agrees and the unit responds correctly."}
+      ],
+      "takeaways": ["Controllers act on what sensors tell them.", "Check wiring, offsets and sensor selection before replacing parts."],
+      "refs": ["icom-getting-started"]
+    },
+    {
+      "id": "multiple-alarms",
+      "title": "Multiple alarms at once",
+      "summary": "A burst of alarms after a power blip.",
+      "situation": "After a brief utility outage, a unit shows several alarms: Loss of Power, High Temperature, Compressor Low Pressure, and Humidifier Problem.",
+      "observations": ["The unit is now running but one compressor is locked out.", "The site's generator transferred during the event."],
+      "steps": [
+        {"kind": "Approach", "prompt": "How should you approach this?", "choices": ["Review the event log in time order to find the first alarm, then work through consequences", "Replace parts for each alarm", "Factory reset the controller", "Disable all alarms"], "answer": "A", "explanation": "One event can cause many alarms. The sequence shows cause and effect."},
+        {"kind": "Power checks", "prompt": "Which power-related checks make sense?", "choices": ["Phase voltages and rotation, phase monitor status, and auto-restart settings", "Refrigerant color", "Filter size", "Humidifier canister age only"], "answer": "A", "explanation": "Power transfers can cause phase loss or imbalance. Check incoming power and how the unit restarted."},
+        {"kind": "Clear and verify", "prompt": "Power is normal. What next for the locked-out compressor?", "choices": ["Check the LP alarm cause (e.g. cold-start low pressure), reset per the manual, and watch it run through a full cycle", "Leave it locked out", "Bypass the LP switch", "Replace the compressor"], "answer": "A", "explanation": "A lockout after a power event may be a one-time trip, but verify by watching pressures on restart."}
+      ],
+      "takeaways": ["Use the event log to separate root cause from consequences.", "After power events, check incoming power and restart behavior."],
+      "refs": ["icom-getting-started"]
+    },
+    {
+      "id": "icom-alarm",
+      "title": "iCOM reports an abnormal condition",
+      "summary": "An unfamiliar alarm text appears on iCOM.",
+      "situation": "The iCOM display shows an alarm you have not seen before on this unit model.",
+      "observations": ["The unit is still cooling.", "You have a phone with internet access."],
+      "steps": [
+        {"kind": "First step", "prompt": "What should you do?", "choices": ["Look up the alarm in the iCOM/unit manual for this model and firmware, and record the exact alarm text and time", "Guess what it means", "Clear it and leave", "Disable it"], "answer": "A", "explanation": "Alarm names and meanings are model and firmware specific. Use the correct documentation."},
+        {"kind": "Information to collect", "prompt": "What additional information helps?", "choices": ["Event log, current operating readings, and any related warnings", "Room paint color", "Customer's favorite temperature", "Nothing"], "answer": "A", "explanation": "Context from logs and readings helps confirm the alarm is real and points toward the cause."},
+        {"kind": "Escalation", "prompt": "The manual's instructions require work you aren't trained for. What do you do?", "choices": ["Make the unit safe, document, and escalate to a qualified technician or technical support", "Attempt it anyway", "Bypass the alarm", "Leave without notice"], "answer": "A", "explanation": "Escalating is the professional choice."}
+      ],
+      "takeaways": ["Never guess an alarm's meaning - look it up for the model.", "Record exact text, time, and readings."],
+      "refs": ["icom-getting-started", "vertiv-support"]
+    },
+    {
+      "id": "condensate-pump",
+      "title": "Condensate pump failure",
+      "summary": "High-water alarm on a ceiling-mounted unit.",
+      "situation": "A ceiling-mounted small-room unit shows a high water / condensate alarm and has stopped cooling.",
+      "observations": ["Ceiling tile below the unit is stained.", "The unit's condensate pump is quiet."],
+      "steps": [
+        {"kind": "Understanding", "prompt": "Why did the unit stop cooling?", "choices": ["A high-water safety (float switch) likely stopped cooling to prevent overflow", "The compressor failed", "The room is too cold", "The filters are new"], "answer": "A", "explanation": "Many units interlock a high-water switch to shut down cooling before the pan overflows."},
+        {"kind": "Troubleshoot", "prompt": "What should be checked?", "choices": ["Pump power, pump float, pump motor, and whether the discharge line is clogged", "Refrigerant charge", "Head pressure control", "iCOM firmware version first"], "answer": "A", "explanation": "Trace the pump circuit and discharge path."},
+        {"kind": "Restore", "prompt": "After repair, what should you do?", "choices": ["Test by adding water, confirm the safety resets and cooling restarts, and report the ceiling damage", "Remove the float switch", "Leave the alarm active", "Turn the unit off"], "answer": "A", "explanation": "Functional testing confirms the repair; reporting damage informs the site."}
+      ],
+      "takeaways": ["High-water safeties protect the space - they stop cooling by design.", "Check the pump and its discharge line."],
+      "applies": "Ceiling-mounted units such as Liebert Mini-Mate2 with condensate pump option",
+      "refs": ["minimate2-23"]
+    },
+    {
+      "id": "dirty-filters",
+      "title": "Dirty air filters during PM",
+      "summary": "Routine PM finds very dirty filters.",
+      "situation": "During a scheduled PM you find the filters heavily loaded with dust. No filter alarm has appeared.",
+      "observations": ["The filter clog switch tubing is cracked.", "Filters were last changed three months ago."],
+      "steps": [
+        {"kind": "Why no alarm", "prompt": "Why might the filter alarm not have appeared?", "choices": ["The cracked sensing tube prevents the differential pressure switch from sensing the pressure drop", "The filters are actually clean", "Filter alarms don't exist", "The compressor is off"], "answer": "A", "explanation": "A filter clog switch measures pressure difference across the filters through tubes. A leak in the tubing defeats it."},
+        {"kind": "Action", "prompt": "What should you do?", "choices": ["Replace the filters, repair/replace the tubing, test the switch, and document", "Replace filters only", "Remove the switch", "Do nothing"], "answer": "A", "explanation": "Fix both the filters and the failed monitoring."},
+        {"kind": "Follow-up", "prompt": "What recommendation might you make?", "choices": ["Shorten the filter change interval if the space is dusty", "Stop changing filters", "Use no filters", "Lower the setpoint"], "answer": "A", "explanation": "Match PM intervals to conditions."}
+      ],
+      "takeaways": ["Alarms are only as good as their sensors.", "Inspect sensing devices during PM."],
+      "refs": ["techtarget-crac-pm", "ds-manual"]
+    }
+  ]
+}

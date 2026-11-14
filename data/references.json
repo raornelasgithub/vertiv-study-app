@@ -1,0 +1,455 @@
+{
+  "_help": "Reference library. Each entry: id (short unique name used by questions), title, org, category, models, description, url, topics (topic ids from topics.json). Add a new entry by copying one block and changing it.",
+  "references": [
+    {
+      "id": "vertiv-tm101i",
+      "title": "TM101I - Servicing Vertiv Thermal Management Equipment (course description, 2022)",
+      "org": "Vertiv Academy",
+      "category": "Training resources",
+      "models": "Mixed Vertiv thermal management equipment",
+      "description": "Official description of the 3-day instructor-led Vertiv Academy course for thermal management technicians. Lists service approach, equipment types, preventive maintenance and troubleshooting as course subjects. Prerequisite listed: TM001O Introducing Thermal Dynamics for Thermal Management.",
+      "url": "https://www.vertiv.com/48e3af/globalassets/services/services/training/servicing-vertiv-thermal-management-equipment-tm101i/tm101i-vertiv-thermal-management-service-2022.pdf",
+      "topics": ["equipment", "maintenance", "troubleshooting"]
+    },
+    {
+      "id": "vertiv-course-schedules",
+      "title": "Vertiv Thermal Training Course Schedules",
+      "org": "Vertiv",
+      "category": "Training resources",
+      "models": "All thermal training courses (TM101I, TM202I and others)",
+      "description": "Vertiv's thermal training schedule page. Older listings show TM202I as 'Vertiv Thermal Management Small Systems'. Contact Vertiv thermal training for current dates and syllabus.",
+      "url": "https://www.vertiv.com/en-ca/products/training/course-schedules",
+      "topics": ["equipment"]
+    },
+    {
+      "id": "icom-getting-started",
+      "title": "Getting Started with Vertiv Liebert iCOM - Installer/User Guide (SL-31075)",
+      "org": "Vertiv",
+      "category": "iCOM documentation",
+      "models": "Liebert iCOM-equipped thermal units",
+      "description": "General iCOM controller guide: display, menus, setpoints, alarms, unit-to-unit networking and control parameters. Menus and features vary by unit type and firmware version.",
+      "url": "https://www.vertiv.com/globalassets/shared/liebert-icom-user-manual_sl-31075.pdf",
+      "topics": ["controls"]
+    },
+    {
+      "id": "icom-legacy-manual",
+      "title": "Liebert iCOM User Manual (legacy, Emerson era) - control, proportional band, deadband, compressor staging",
+      "org": "Liebert / Emerson Network Power (hosted by ManualsLib)",
+      "category": "iCOM documentation",
+      "models": "Older iCOM-controlled Liebert DS, CW, Challenger, Deluxe units",
+      "description": "Older iCOM manual explaining proportional band split into cooling and heating halves, optional deadband centered on setpoint, Proportional / PI / Intelligent control, compressor proportional bands, 4-step unloader staging and digital scroll operation. Third-party host; use the official Vertiv manual for your unit when available.",
+      "url": "https://www.manualslib.com/manual/598033/Liebert-Icom.html?page=22",
+      "topics": ["controls", "compressors"]
+    },
+    {
+      "id": "icom-s-manual",
+      "title": "Liebert iCOM-S User Manual",
+      "org": "Vertiv",
+      "category": "iCOM documentation",
+      "models": "Liebert iCOM-S supervisory control (multiple units)",
+      "description": "Manual for the iCOM-S touchscreen supervisory system that monitors and coordinates multiple cooling units.",
+      "url": "https://www.vertiv.com/4ab1db/globalassets/products/thermal-management/thermal-control-and-monitoring/liebert-icom-s-user-manual.pdf",
+      "topics": ["controls"]
+    },
+    {
+      "id": "icom-cms",
+      "title": "Liebert iCOM CMS Quick Installation Guide (SL-18830)",
+      "org": "Vertiv",
+      "category": "iCOM documentation",
+      "models": "Liebert Mini-Mate2, DataMate, SRC mini-split",
+      "description": "Quick installation guide for the iCOM CMS monitoring/control module used on small-room systems such as Mini-Mate2 and DataMate. The full iCOM CMS Installer/User Guide can be found through Vertiv support.",
+      "url": "https://www.vertiv.com/globalassets/shared/liebert-icom-cms-quick-installation-guide.pdf",
+      "topics": ["controls", "equipment"]
+    },
+    {
+      "id": "u2u-setup",
+      "title": "Vertiv Unit-to-Unit (U2U) Communication Setup Installer/User Guide (SL-70876)",
+      "org": "Vertiv",
+      "category": "iCOM documentation",
+      "models": "iCOM-equipped units networked together (e.g. PDX, PCW, DS)",
+      "description": "How multiple iCOM units are networked so they can share information, run teamwork modes and rotate standby units.",
+      "url": "https://www.vertiv.com/49da5b/globalassets/products/thermal-management/room-cooling/vertiv-liebert--pcw-chilled-water-floor-mount-cooling-unit/liebert-u2u-communication-setup-manual-sl-708762.pdf",
+      "topics": ["controls"]
+    },
+    {
+      "id": "icom-crv",
+      "title": "Liebert CRV with iCOM - User Manual",
+      "org": "Vertiv",
+      "category": "iCOM documentation",
+      "models": "Liebert CRV in-row units",
+      "description": "iCOM operation as applied to CRV row-based cooling: rack inlet sensors, setpoints and alarms.",
+      "url": "https://www.vertiv.com/globalassets/shared/liebert-crv-with-icom-user-manual_00.pdf",
+      "topics": ["controls", "equipment"]
+    },
+    {
+      "id": "ds-manual",
+      "title": "Liebert DS Installer/User Guide, 35-105 kW, 50/60 Hz",
+      "org": "Vertiv",
+      "category": "Equipment manuals",
+      "models": "Liebert DS (DX perimeter unit)",
+      "description": "Installation, operation, maintenance and troubleshooting for the Liebert DS, including compressor options, digital scroll unloading solenoids, head pressure control, humidifier, reheat and preventive maintenance. Very large PDF.",
+      "url": "https://www.vertiv.com/globalassets/products/thermal-management/room-cooling/liebert-ds-5060hz-user-manual.pdf",
+      "topics": ["equipment", "compressors", "maintenance", "humidity", "refrigeration"]
+    },
+    {
+      "id": "dse-manual",
+      "title": "Liebert DSE 50-165 kW User Manual",
+      "org": "Vertiv",
+      "category": "Equipment manuals",
+      "models": "Liebert DSE with EconoPhase pumped refrigerant economizer",
+      "description": "DSE installation, operation and service, including digital scroll compressor unloading solenoid information and economizer operation.",
+      "url": "https://www.vertiv.com/globalassets/products/thermal-management/room-cooling/liebert-dse-50-165kw-user-manual_0.pdf",
+      "topics": ["equipment", "compressors"]
+    },
+    {
+      "id": "econophase",
+      "title": "Liebert EconoPhase Pumped Refrigerant Economizer (product page)",
+      "org": "Vertiv",
+      "category": "Official Vertiv manuals",
+      "models": "Liebert DSE + Liebert MC condenser",
+      "description": "Explains the pumped refrigerant economizer used with Liebert DSE: when outdoor temperature is low enough, refrigerant pumps move heat to the condenser and compressor run time is reduced or eliminated, without outside air or water.",
+      "url": "https://www.vertiv.com/en-us/products-catalog/thermal-management/room-cooling/liebert-econophase-pumped-refrigerant-economizer/",
+      "topics": ["equipment"]
+    },
+    {
+      "id": "pdx-pcw-manual",
+      "title": "Liebert PDX and Liebert PCW Thermal Management System User Manual",
+      "org": "Vertiv",
+      "category": "Equipment manuals",
+      "models": "Liebert PDX (DX) and Liebert PCW (chilled water)",
+      "description": "User manual for the PDX direct-expansion and PCW chilled-water perimeter units, both controlled by iCOM.",
+      "url": "https://www.vertiv.com/globalassets/products/thermal-management/room-cooling/liebert-pdx-pcw-thermal-management-system-user-manual_01.pdf",
+      "topics": ["equipment", "maintenance"]
+    },
+    {
+      "id": "pdx-pcw-design",
+      "title": "Liebert PDX / Liebert PCW System Design Manual",
+      "org": "Vertiv",
+      "category": "Official Vertiv manuals",
+      "models": "Liebert PDX, Liebert PCW",
+      "description": "Design catalog describing configurations, components and options of PDX and PCW units.",
+      "url": "https://www.vertiv.com/globalassets/products/thermal-management/room-cooling/liebert-pdx--liebert-pcw-system-design-manual_00.pdf",
+      "topics": ["equipment"]
+    },
+    {
+      "id": "pdx-product",
+      "title": "Liebert PDX Direct Expansion Floor-Mount Cooling Unit (product page)",
+      "org": "Vertiv",
+      "category": "Official Vertiv manuals",
+      "models": "Liebert PDX",
+      "description": "Product overview of the PDX DX floor-mount unit family.",
+      "url": "https://www.vertiv.com/en-us/products-catalog/thermal-management/room-cooling/liebert-pdx-direct-expansion-floor-mount-cooling-unit-from-15-to-120-kw/",
+      "topics": ["equipment"]
+    },
+    {
+      "id": "pcw-product",
+      "title": "Liebert PCW Chilled Water Floor-Mount Cooling Unit (product page)",
+      "org": "Vertiv",
+      "category": "Official Vertiv manuals",
+      "models": "Liebert PCW",
+      "description": "Product overview of the PCW chilled-water perimeter unit controlled by iCOM.",
+      "url": "https://www.vertiv.com/en-us/products-catalog/thermal-management/room-cooling/vertiv-liebert--pcw-chilled-water-floor-mount-cooling-unit/",
+      "topics": ["equipment"]
+    },
+    {
+      "id": "crv-datasheet",
+      "title": "Liebert CRV In-Row Cooling System Datasheet (TM303)",
+      "org": "Vertiv",
+      "category": "Official Vertiv manuals",
+      "models": "Liebert CRV",
+      "description": "Datasheet for the CRV row-based (in-row) precision cooling unit designed for high-density racks.",
+      "url": "https://www.vertiv.com/49c38c/globalassets/products/thermal-management/in-row-cooling/liebert-crv-in-row-cooling-system-10-40kw/tm303-vertiv-crv-thermal-management-systems_datasheet_en-na.pdf",
+      "topics": ["equipment"]
+    },
+    {
+      "id": "minimate2-23",
+      "title": "Liebert Mini-Mate2 2-3 Ton User Manual",
+      "org": "Vertiv",
+      "category": "Equipment manuals",
+      "models": "Liebert Mini-Mate2 (ceiling-mounted small room)",
+      "description": "Installation, piping, startup and maintenance for the ceiling-mounted Mini-Mate2. Separate guides exist for 1-1.5 ton and 5 ton units.",
+      "url": "https://www.vertiv.com/globalassets/shared/liebert-mini-mate2-2--3-tons-user-manual_00.pdf",
+      "topics": ["equipment", "maintenance"]
+    },
+    {
+      "id": "minimate2-1",
+      "title": "Liebert Mini-Mate2 1-1.5 Ton User Manual",
+      "org": "Vertiv",
+      "category": "Equipment manuals",
+      "models": "Liebert Mini-Mate2",
+      "description": "Smaller-capacity Mini-Mate2 installer/user guide.",
+      "url": "https://www.vertiv.com/globalassets/products/thermal-management/room-cooling/liebert-mini-mate2-1--1.5-tons-user-manual_00.pdf",
+      "topics": ["equipment"]
+    },
+    {
+      "id": "minimate-vc",
+      "title": "Liebert Mini-Mate Variable Capacity Installer/User Guide",
+      "org": "Vertiv",
+      "category": "Equipment manuals",
+      "models": "Liebert Mini-Mate variable capacity (ceiling-mounted)",
+      "description": "Ceiling-mounted variable-capacity Mini-Mate. The guide notes Mini-Mate systems require POE (polyolester) oil.",
+      "url": "https://www.vertiv.com/4a1f6d/globalassets/products/thermal-management/room-cooling/liebert-mini-mate-ceiling-mounted-variable-capacity-cooling-17.5kw/liebert-mini-mate-variable-capacity-installeruserguide.pdf",
+      "topics": ["equipment", "refrigeration"]
+    },
+    {
+      "id": "pfd-condensing",
+      "title": "Liebert Prop Fan Digital Condensing Unit User Manual",
+      "org": "Vertiv",
+      "category": "Equipment manuals",
+      "models": "Liebert PFD condensing unit (used with Mini-Mate variable capacity)",
+      "description": "Outdoor prop-fan condensing unit with digital scroll compressor; includes unloading solenoid information.",
+      "url": "https://www.vertiv.com/globalassets/products/thermal-management/room-cooling/liebert-mini-mate-ceiling-mounted-variable-capacity-cooling-17.5kw/liebert-prop-fan-digital-condensing-unit.pdf",
+      "topics": ["equipment", "compressors"]
+    },
+    {
+      "id": "datamate",
+      "title": "Liebert DataMate 1.5-3 Ton User Manual",
+      "org": "Vertiv",
+      "category": "Equipment manuals",
+      "models": "Liebert DataMate (small floor/wall-mount)",
+      "description": "Installation, preventive maintenance and troubleshooting for the DataMate small-room cooling unit.",
+      "url": "https://www.vertiv.com/globalassets/shared/liebert-datamate-1.5-3-tons-user-manual_00.pdf",
+      "topics": ["equipment", "maintenance", "troubleshooting"]
+    },
+    {
+      "id": "deluxe-sys3",
+      "title": "Liebert Deluxe System/3 Operation & Maintenance Manual (discontinued product)",
+      "org": "Vertiv",
+      "category": "Equipment manuals",
+      "models": "Liebert Deluxe System/3 (legacy)",
+      "description": "Legacy manual. Describes four-step systems that add cylinder unloaders on one head of each semi-hermetic compressor so compressors can run at reduced capacity under low load.",
+      "url": "https://www.vertiv.com/49ac30/globalassets/products/thermal-management/room-cooling/discontinued---liebert-deluxe-system-3-precision-cooling-systems-21-105kw/liebert-deluxe-system-3-operation--maintenance-manual.pdf",
+      "topics": ["compressors", "equipment"]
+    },
+    {
+      "id": "coolphase-ds",
+      "title": "Vertiv CoolPhase Perimeter DS035-105 User Manual (SL-80164)",
+      "org": "Vertiv",
+      "category": "Equipment manuals",
+      "models": "Vertiv CoolPhase Perimeter (newer low-GWP perimeter units)",
+      "description": "Newer perimeter DX unit documentation, including digital scroll unloading solenoid section.",
+      "url": "https://www.vertiv.com/4a7f10/globalassets/shared/vertiv-coolphase-perimeter-ds035-105-user-manual-sl-80164.pdf",
+      "topics": ["equipment", "compressors"]
+    },
+    {
+      "id": "precision-ac-article",
+      "title": "What does precision air conditioning mean now?",
+      "org": "Vertiv",
+      "category": "Official Vertiv manuals",
+      "models": "General",
+      "description": "Vertiv article on precision cooling for IT spaces vs comfort cooling.",
+      "url": "https://www.vertiv.com/en-us/about/news-and-insights/articles/educational-articles/what-does-precision-air-conditioning-mean-now-and-is-it-still-a-necessity-for-it-spaces/",
+      "topics": ["equipment", "airflow"]
+    },
+    {
+      "id": "copeland-digital",
+      "title": "How Copeland Scroll Digital Works",
+      "org": "Emerson / Copeland (hosted by InspectAPedia)",
+      "category": "Refrigeration fundamentals",
+      "models": "Copeland Digital Scroll compressors",
+      "description": "Explains digital scroll capacity modulation: solenoid energized = unloaded (scrolls separate axially, no pumping); de-energized = loaded (full capacity); average capacity set by the loaded/unloaded time ratio.",
+      "url": "https://inspectapedia.com/aircond/How-Copeland-Scroll-Digital-Works-Emerson.pdf",
+      "topics": ["compressors"]
+    },
+    {
+      "id": "copeland-dcc",
+      "title": "Copeland Digital Compressor Controller - Application Engineering Bulletin",
+      "org": "Copeland",
+      "category": "Refrigeration fundamentals",
+      "models": "Copeland Scroll Digital and Discus Digital compressors",
+      "description": "Manufacturer bulletin for the controller that sits between a digital compressor and the system controller and drives the unloading solenoid. Useful for understanding digital compressor control and protection; details are model-specific.",
+      "url": "https://webapps2.copeland.com/ci/digital-compressor-controller/ae-bulletin.pdf",
+      "topics": ["compressors"]
+    },
+    {
+      "id": "hvacr-digital-scroll",
+      "title": "Axial, Radial and Digital Scrolls",
+      "org": "HVAC School",
+      "category": "Refrigeration fundamentals",
+      "models": "Scroll compressors (general)",
+      "description": "Technician-friendly explanation of axial/radial compliance and digital scroll loading/unloading, including the unusual sound and cycling amp draw of a digital scroll.",
+      "url": "https://hvacrschool.com/axial-radial-and-digital-scrolls/",
+      "topics": ["compressors"]
+    },
+    {
+      "id": "hvacr-superheat-basics",
+      "title": "Superheat and Subcooling Basics (podcast/article)",
+      "org": "HVAC School",
+      "category": "Refrigeration fundamentals",
+      "models": "General",
+      "description": "Recap of superheat, subcooling, sensible vs latent heat, metering devices and target vs measured values. Notes that for zeotropic blends, superheat uses dew point and subcooling uses bubble point.",
+      "url": "https://hvacrschool.com/podcasts/superheat-and-subcooling-basics-2",
+      "topics": ["refrigeration"]
+    },
+    {
+      "id": "hvacr-pressures",
+      "title": "AC Pressures, Subcooling and Superheat (video)",
+      "org": "HVAC School",
+      "category": "Refrigeration fundamentals",
+      "models": "General",
+      "description": "Video explaining how suction/discharge pressure, superheat and subcooling relate, including subcooling as an indicator of liquid 'stacked' in the condenser.",
+      "url": "https://hvacrschool.com/videos/ac-pressures-subcooling-and-superheat/",
+      "topics": ["refrigeration"]
+    },
+    {
+      "id": "hvacr-solving-superheat",
+      "title": "Solving Superheat",
+      "org": "HVAC School",
+      "category": "Refrigeration fundamentals",
+      "models": "General",
+      "description": "How to interpret superheat readings as diagnostic data.",
+      "url": "https://hvacrschool.com/solving-superheat/",
+      "topics": ["refrigeration", "troubleshooting"]
+    },
+    {
+      "id": "hvacr-compressor-diag",
+      "title": "Compressor Failure Diagnosis and Replacement Checklist",
+      "org": "HVAC School",
+      "category": "Troubleshooting",
+      "models": "General (scroll and reciprocating)",
+      "description": "Step-by-step approach to verifying a compressor failure before condemning it: power, controls, capacitors, windings, pressures and root cause.",
+      "url": "https://www.hvacrschool.com/compressor-failure-diagnosis-and-replacement-checklist/",
+      "topics": ["compressors", "electrical", "troubleshooting"]
+    },
+    {
+      "id": "hvacr-server-room",
+      "title": "Tips for Server Room Conditioning",
+      "org": "HVAC School",
+      "category": "Industry discussions and technician experiences",
+      "models": "General IT space cooling",
+      "description": "Field advice for server rooms: uptime is critical, comfort-cooling assumptions don't apply, airflow management matters.",
+      "url": "https://hvacrschool.com/tips-for-server-room-conditioning",
+      "topics": ["airflow", "equipment"]
+    },
+    {
+      "id": "hvacr-crac-podcast",
+      "title": "Have Fun with CRAC (Computer Room A/C) - podcast",
+      "org": "HVAC School",
+      "category": "Industry discussions and technician experiences",
+      "models": "CRAC/CRAH units (general)",
+      "description": "Technician discussion of computer-room air conditioning service: precision cooling, humidity control and common field issues.",
+      "url": "https://hvacrschool.com/podcasts/have-fun-with-crac-computer-room-a-c",
+      "topics": ["equipment", "troubleshooting"]
+    },
+    {
+      "id": "techtarget-crac-pm",
+      "title": "Best practices for maintaining a data center CRAC unit",
+      "org": "TechTarget",
+      "category": "Industry discussions and technician experiences",
+      "models": "CRAC units (general)",
+      "description": "Preventive maintenance article: filters as the most important routine task, belt tension checks, redundancy so a unit can be taken out of service.",
+      "url": "https://www.techtarget.com/searchdatacenter/tip/Best-practices-for-maintaining-a-data-center-CRAC-unit",
+      "topics": ["maintenance"]
+    },
+    {
+      "id": "osha-loto",
+      "title": "Control of Hazardous Energy (Lockout/Tagout)",
+      "org": "OSHA",
+      "category": "Electrical safety",
+      "models": "All equipment",
+      "description": "OSHA's main lockout/tagout page and standard 29 CFR 1910.147: energy control programs, procedures, training, and lock/tag rules.",
+      "url": "https://www.osha.gov/control-hazardous-energy",
+      "topics": ["electrical", "maintenance"]
+    },
+    {
+      "id": "osha-1910-147",
+      "title": "29 CFR 1910.147 - The control of hazardous energy (regulation text)",
+      "org": "OSHA",
+      "category": "Electrical safety",
+      "models": "All equipment",
+      "description": "Full regulation text for lockout/tagout. Includes the rule that each lock/tag is removed only by the employee who applied it (with a limited, documented exception).",
+      "url": "https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.147",
+      "topics": ["electrical"]
+    },
+    {
+      "id": "osha-1910-333",
+      "title": "29 CFR 1910.333 - Selection and use of work practices (electrical)",
+      "org": "OSHA",
+      "category": "Electrical safety",
+      "models": "All equipment",
+      "description": "Electrical safety-related work practices, including requiring a qualified person to use test equipment to verify circuit parts are de-energized before work.",
+      "url": "https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.333",
+      "topics": ["electrical"]
+    },
+    {
+      "id": "osha-electrical",
+      "title": "OSHA Electrical Safety topic page",
+      "org": "OSHA",
+      "category": "Electrical safety",
+      "models": "All equipment",
+      "description": "Overview of electrical hazards, standards and training resources.",
+      "url": "https://www.osha.gov/electrical",
+      "topics": ["electrical"]
+    },
+    {
+      "id": "nfpa-70e",
+      "title": "NFPA 70E, Standard for Electrical Safety in the Workplace",
+      "org": "NFPA",
+      "category": "Electrical safety",
+      "models": "All equipment",
+      "description": "Consensus standard for electrically safe work practices, PPE, arc flash and establishing an electrically safe work condition. Free read-only access is available from NFPA after sign-in.",
+      "url": "https://www.nfpa.org/codes-and-standards/nfpa-70e-standard-development/70e",
+      "topics": ["electrical"]
+    },
+    {
+      "id": "esfi-test-before-touch",
+      "title": "Electrical Safety Foundation International (ESFI) - workplace safety resources",
+      "org": "ESFI",
+      "category": "Electrical safety",
+      "models": "All equipment",
+      "description": "Free workplace electrical safety resources, including the 'test before you touch' message.",
+      "url": "https://www.esfi.org/workplace-safety/",
+      "topics": ["electrical"]
+    },
+    {
+      "id": "epa-608",
+      "title": "Section 608 Technician Certification",
+      "org": "U.S. EPA",
+      "category": "Refrigeration fundamentals",
+      "models": "All stationary refrigeration and A/C",
+      "description": "Official EPA page on 608 certification (Core, Type I, II, III, Universal). Technicians who open refrigerant circuits must be certified.",
+      "url": "https://www.epa.gov/section608/section-608-technician-certification-0",
+      "topics": ["refrigeration"]
+    },
+    {
+      "id": "epa-608-overview",
+      "title": "Stationary Refrigeration and Air Conditioning (Section 608 overview)",
+      "org": "U.S. EPA",
+      "category": "Refrigeration fundamentals",
+      "models": "All stationary refrigeration and A/C",
+      "description": "EPA rules on refrigerant handling, venting prohibition, leak repair and recovery.",
+      "url": "https://www.epa.gov/section608",
+      "topics": ["refrigeration", "maintenance"]
+    },
+    {
+      "id": "achr-digital-capacity",
+      "title": "The Professor: Digital Capacity Control for Compressors",
+      "org": "ACHR News",
+      "category": "Refrigeration fundamentals",
+      "models": "Digital scroll compressors",
+      "description": "Trade-magazine explanation of digital (pulse-width) capacity control.",
+      "url": "https://www.achrnews.com/articles/108947-the-professor-digital-capacity-control-for-compressors",
+      "topics": ["compressors"]
+    },
+    {
+      "id": "ashrae-tc99",
+      "title": "ASHRAE TC 9.9 - Mission Critical Facilities, Data Centers, Technology Spaces",
+      "org": "ASHRAE",
+      "category": "Industry discussions and technician experiences",
+      "models": "Data centers (general)",
+      "description": "ASHRAE technical committee responsible for data center thermal guidelines (recommended/allowable inlet temperature and humidity ranges).",
+      "url": "https://tc0909.ashraetcs.org/",
+      "topics": ["airflow", "humidity"]
+    },
+    {
+      "id": "vertiv-support",
+      "title": "Vertiv Support - documents and downloads",
+      "org": "Vertiv",
+      "category": "Official Vertiv manuals",
+      "models": "All Vertiv products",
+      "description": "Starting point to find the correct manual for a specific model and serial number.",
+      "url": "https://www.vertiv.com/en-us/support/",
+      "topics": ["equipment", "maintenance"]
+    }
+  ]
+}
